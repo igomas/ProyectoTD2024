@@ -26,20 +26,65 @@ En nuestro caso, hemos decidido hacer la exploración de las horas más concurri
 
 ```{r}
 #Hacemos la importacion de los datos
-
+#descargaremos las librerias que necesitamos
+library(readr)
 #Primero vamos a guardar en una variable la ruta donde se encuentra la carpeta con todos nuestros ficheros
 carpeta_ruta <- ".\\data"
 
 #Ahora declararemos una variable donde usaremos el codigo list.files para obtener una lista de archivos dentro de la carpeta.
 archivos_texto <- list.files(path = carpeta_ruta , pattern = "\\.txt$", full.names = TRUE)
 
+#crear una lista vacia donde iremos almacvenando los dataframe que iremos creando de cada archivo
+lista_dataframe <- list()
+
 # Crearemos un bucle el cual iterará sobre cada archivo en la lista creada previamente
 for (archivo in archivos_texto) {
-  # Hacer algo con cada archivo, por ejemplo, imprimir el nombre del archivo
+  # Leer las líneas del archivo
+  lineas <- read_lines(archivo)
   
+  # Eliminar líneas en blanco o vacías
+  lineas <- lineas[lineas != ""]
   
-  # Puedes agregar aquí el código para leer o procesar cada archivo según lo necesites
+  # Extraer la información relevante
+  empresa <- lineas[1]
+  direccion <- lineas[2]
+  ciudad <- lineas[3]
+  telefono <- lineas[4]
+  fecha <- lineas[5]
+  numero_operacion <- lineas[6]
+  factura <- lineas[7]
+  
+  # Verificar si la cadena "TOTAL (?)" está presente en las líneas del archivo
+  if ("TOTAL (?)" %in% lineas) {
+    # Las líneas de productos comienzan desde la línea 9 hasta antes de "TOTAL (?)" 
+    productos <- lineas[8:(which(lineas == "TOTAL (?)") - 1)]
+    
+    # Crear un DataFrame para los productos
+    df_product <- data.frame(do.call(rbind, strsplit(productos, " ", fixed = TRUE)))
+    
+    # Renombrar las columnas del DataFrame de productos
+    colnames(df_product) <- c("Cantidad", "Producto")
+  } else {
+    # Si "TOTAL (?)" no está presente, asignar NA a productos
+    df_product <- data.frame(Cantidad = NA, Producto = NA)
+  }
+   # Agregar el DataFrame de productos al DataFrame principal
+  df_final <- data.frame(Empresa = empresa,
+                         Direccion = direccion,
+                         Ciudad = ciudad,
+                         Telefono = telefono,
+                         Fecha = fecha,
+                         Numero_Operacion = numero_operacion,
+                         Factura = factura,
+                         df_product)
+  
+  # Agregar el DataFrame a la lista
+  lista_dataframe[[length(lista_dataframe) + 1]] <- df_final
 }
+
+# Combinar todos los DataFrames en uno solo
+df_completo <- do.call(rbind, lista_dataframe)
+
 
 ```
 
