@@ -21,10 +21,10 @@ knitr::opts_chunk$set(echo = TRUE)
 #Hacemos la importacion de los datos
 
 #Primero vamos a guardar en una variable la ruta donde se encuentra la carpeta con todos nuestros ficheros
-carpeta_ruta <- ".\\data_text"
+carpeta_ruta <- ".\\data"
 
 #Ahora declararemos una variable donde usaremos el codigo list.files para obtener una lista de archivos dentro de la carpeta.
-archivos_texto <- list.files(path = carpeta_ruta , full.names = TRUE)
+archivos_texto <- list.files(path = carpeta_ruta , pattern = "\\.txt$", full.names = TRUE)
 
 # Crearemos un bucle el cual iterará sobre cada archivo en la lista creada previamente
 for (archivo in archivos_texto) {
