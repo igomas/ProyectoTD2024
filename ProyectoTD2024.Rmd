@@ -40,19 +40,24 @@ lista_dataframe <- list()
 # Crearemos un bucle el cual iterará sobre cada archivo en la lista creada previamente
 for (archivo in archivos_texto) {
   # Leer las líneas del archivo
-  lineas <- read_lines(archivo)
+  #lineas <- read_lines(archivo)
+  lineas <- read_lines(archivo, locale = locale(encoding = "latin1"))
+
   
   # Eliminar líneas en blanco o vacías
   lineas <- lineas[lineas != ""]
   
   # Extraer la información relevante
+  # Extraer la información relevante
   empresa <- lineas[1]
   direccion <- lineas[2]
   ciudad <- lineas[3]
-  telefono <- lineas[4]
+  telefono_linea <- lineas[grep("TELÉFONO:", lineas)]
+  telefono <- substring(telefono_linea, regexpr(":", telefono_linea) + 1)
   fecha <- lineas[5]
   numero_operacion <- lineas[6]
   factura <- lineas[7]
+
   
   # Verificar si la cadena "TOTAL (?)" está presente en las líneas del archivo
   if ("TOTAL (?)" %in% lineas) {
