@@ -28,62 +28,61 @@ En nuestro caso, hemos decidido hacer la exploración de las horas más concurri
 #Hacemos la importacion de los datos
 #descargaremos las librerias que necesitamos
 library(readr)
+library(dplyr)
+library(tidyr)
+
 #Primero vamos a guardar en una variable la ruta donde se encuentra la carpeta con todos nuestros ficheros
 carpeta_ruta <- ".\\data"
 
 #Ahora declararemos una variable donde usaremos el codigo list.files para obtener una lista de archivos dentro de la carpeta.
 archivos_texto <- list.files(path = carpeta_ruta , pattern = "\\.txt$", full.names = TRUE)
 
-#crear una lista vacia donde iremos almacvenando los dataframe que iremos creando de cada archivo
-lista_dataframe <- list()
+# Crear una lista para almacenar los datos de cada archivo
+datos <- list()
 
-# Crearemos un bucle el cual iterará sobre cada archivo en la lista creada previamente
+# Iterar sobre cada archivo en la lista de archivos
 for (archivo in archivos_texto) {
   # Leer las líneas del archivo
-  lineas <- read_lines(archivo)
+  lineas <- read_lines(archivo, locale = locale(encoding = "latin1")) #ponemos el     encoding correspondiente
   
   # Eliminar líneas en blanco o vacías
   lineas <- lineas[lineas != ""]
   
-  # Extraer la información relevante
+  # Extraer la información de las lineas de los archivos donde su contenido se trata   #del mismo
   empresa <- lineas[1]
   direccion <- lineas[2]
   ciudad <- lineas[3]
-  telefono <- lineas[4]
+  #ajustaremos la forma en la que guarda los datos en la columna Telefono
+  telefono_linea <- lineas[grep("TELÉFONO:", lineas)]
+  telefono <- substring(telefono_linea, regexpr(":", telefono_linea) + 1)
+  #haremos lo mismo con la Fecha
   fecha <- lineas[5]
-  numero_operacion <- lineas[6]
-  factura <- lineas[7]
+ 
+  #numero_operacion <- lineas[6]
+  factura_linea <- lineas[grep("FACTURA SIMPLIFICADA:", lineas)]
+  factura <- substring(factura_linea, regexpr(":", factura_linea) + 2)
+ 
+  descripcion <- lineas[7]
   
-  # Verificar si la cadena "TOTAL (?)" está presente en las líneas del archivo
-  if ("TOTAL (?)" %in% lineas) {
-    # Las líneas de productos comienzan desde la línea 9 hasta antes de "TOTAL (?)" 
-    productos <- lineas[8:(which(lineas == "TOTAL (?)") - 1)]
-    
-    # Crear un DataFrame para los productos
-    df_product <- data.frame(do.call(rbind, strsplit(productos, " ", fixed = TRUE)))
-    
-    # Renombrar las columnas del DataFrame de productos
-    colnames(df_product) <- c("Cantidad", "Producto")
-  } else {
-    # Si "TOTAL (?)" no está presente, asignar NA a productos
-    df_product <- data.frame(Cantidad = NA, Producto = NA)
-  }
-   # Agregar el DataFrame de productos al DataFrame principal
-  df_final <- data.frame(Empresa = empresa,
-                         Direccion = direccion,
-                         Ciudad = ciudad,
-                         Telefono = telefono,
-                         Fecha = fecha,
-                         Numero_Operacion = numero_operacion,
-                         Factura = factura,
-                         df_product)
+  # Almacenar la información en un dataframe temporal
+  df_temporal <- data.frame(Empresa = empresa,
+                            Direccion = direccion,
+                            Ciudad = ciudad,
+                            Telefono = telefono,
+                            Fecha = fecha,
+                            Numero_Operacion = numero_operacion,
+                            Factura = factura)
   
-  # Agregar el DataFrame a la lista
-  lista_dataframe[[length(lista_dataframe) + 1]] <- df_final
+  # Añadir el dataframe temporal a la lista de datos
+  datos[[length(datos) + 1]] <- df_temporal
 }
 
-# Combinar todos los DataFrames en uno solo
-df_completo <- do.call(rbind, lista_dataframe)
+# Concatenar todos los dataframes en uno solo
+data1 <- bind_rows(datos)
+#vamos a separar la columna Ciudad en dos , donde una se llamara codigo postal y otra ciudad
+data1<- separate(data1, Ciudad, into = c("codigo postal", "ciudad"))
+#aqui hemos hecho lo mismo pero con la columna Fecha la cual hemos separado en fecha y hora
+data1 <- separate(data1, Fecha, into = c("fecha", "hora"), sep = "(\\s+|\\s+OP:\\s+)")
 
 
 ```
