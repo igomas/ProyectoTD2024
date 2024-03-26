@@ -16,3 +16,23 @@ knitr::opts_chunk$set(echo = TRUE)
 3. Cuánta gente paga con tarjeta?
 4. Cual es el precio medio de los tickets?
 5. Media de la cantidad de "x producto" en los ultimos meses
+
+```{r}
+#Hacemos la importacion de los datos
+
+#Primero vamos a guardar en una variable la ruta donde se encuentra la carpeta con todos nuestros ficheros
+carpeta_ruta <- ".\\data_text"
+
+#Ahora declararemos una variable donde usaremos el codigo list.files para obtener una lista de archivos dentro de la carpeta.
+archivos_texto <- list.files(path = carpeta_ruta , full.names = TRUE)
+
+# Crearemos un bucle el cual iterará sobre cada archivo en la lista creada previamente
+for (archivo in archivos_texto) {
+  # Hacer algo con cada archivo, por ejemplo, imprimir el nombre del archivo
+  
+  
+  # Puedes agregar aquí el código para leer o procesar cada archivo según lo necesites
+}
+
+```
+
