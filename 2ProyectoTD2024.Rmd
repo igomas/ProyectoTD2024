@@ -1,0 +1,100 @@
+---
+title: "ProyectoTD2024 Grupo F"
+author: "Maria Castellanos, Pablo Pons, Irene Gómez, Jenny Carolina Matamoros, Andreu Herrero"
+date: "2024-03-26"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduccion
+
+El conjunto de datos que vamos a utilizar para el análisis de nuestro proyecto pertenecen al supermercado Mercadona. En concreto, son tickets de los usuarios que realizan sus compras en dicho supermercado, que tiene como propósito informar de las compras de dichos usuarios. 
+
+En nuestro caso, hemos decidido hacer la exploración de las horas más concurridas, de la evolución del precio de los productos, del método de pago, del precio medio de la compra y de la media de la cantidad de los productos comprados.
+
+
+# Preguntas
+
+1. A qué hora se suele ir más a comprar?
+2. Cuál ha sido la evolución del precio de la leche?
+3. Cuánta gente paga con tarjeta?
+4. Cual es el precio medio de los tickets?
+5. Media de la cantidad de "x producto" en los ultimos meses
+
+```{r}
+#Hacemos la importacion de los datos
+#descargaremos las librerias que necesitamos
+library(readr)
+library(dplyr)
+library(tidyr)
+
+#Primero vamos a guardar en una variable la ruta donde se encuentra la carpeta con todos nuestros ficheros
+carpeta_ruta <- ".\\data"
+
+#Ahora declararemos una variable donde usaremos el codigo list.files para obtener una lista de archivos dentro de la carpeta.
+archivos_texto <- list.files(path = carpeta_ruta , pattern = "\\.txt$", full.names = TRUE)
+
+# Crear una lista para almacenar los datos de cada archivo
+datos <- list()
+
+# Iterar sobre cada archivo en la lista de archivos
+for (archivo in archivos_texto) {
+  # Leer las líneas del archivo
+  lineas <- read_lines(archivo, locale = locale(encoding = "latin1")) #ponemos el     encoding correspondiente
+
+  lineas <- read_lines(archivo, locale = locale(encoding = "latin1")) #ponemos el encoding correspondiente
+  
+  # Eliminar líneas en blanco o vacías
+  lineas <- lineas[lineas != ""]
+  # Extraer la información de las lineas de los archivos donde su contenido se trata   #del mismo
+  empresa <- lineas[1]
+  direccion <- lineas[2]
+  ciudad <- lineas[3]
+  #ajustaremos la forma en la que guarda los datos en la columna Telefono
+  telefono_linea <- lineas[grep("TELÉFONO:", lineas)]
+  telefono <- substring(telefono_linea, regexpr(":", telefono_linea) + 1)
+  #haremos lo mismo con la Fecha
+  fecha <- lineas[5]
+  if (!is.na(fecha)) {
+  partes_fecha_operacion <- strsplit(fecha, "  ")
+  fecha <- partes_fecha_operacion[[1]][1]
+  numero_operacion <- partes_fecha_operacion[[1]][3]
+} else {
+  # Si la fecha no está presente, asignar NA al número de operación
+  fecha <- NA
+  numero_operacion <- NA
+}
+ 
+  #numero_operacion <- lineas[6]
+  factura_linea <- lineas[grep("FACTURA SIMPLIFICADA:", lineas)]
+  factura <- substring(factura_linea, regexpr(":", factura_linea) + 2)
+ 
+  descripcion <- lineas[7]
+  
+  # Almacenar la información en un dataframe temporal
+  df_temporal <- data.frame(Empresa = empresa,
+                            Direccion = direccion,
+                            Ciudad = ciudad,
+                            Telefono = telefono,
+                            Fecha = fecha,
+                            Numero_Operacion = numero_operacion,
+                            Factura = factura)
+
+
+  
+  # Añadir el dataframe temporal a la lista de datos
+  datos[[length(datos) + 1]] <- df_temporal
+}
+
+# Concatenar todos los dataframes en uno solo
+data1 <- bind_rows(datos)
+#vamos a separar la columna Ciudad en dos , donde una se llamara codigo postal y otra ciudad
+data1<- separate(data1, Ciudad, into = c("codigo postal", "ciudad"))
+#aqui hemos hecho lo mismo pero con la columna Fecha la cual hemos separado en fecha y hora
+data1 <- separate(data1, Fecha, into = c("fecha", "hora"), sep = "(\\s+|\\s+OP:\\s+)")
+
+```
+
