@@ -40,8 +40,7 @@ lista_dataframe <- list()
 # Crearemos un bucle el cual iterará sobre cada archivo en la lista creada previamente
 for (archivo in archivos_texto) {
   # Leer las líneas del archivo
-  #lineas <- read_lines(archivo)
-  lineas <- read_lines(archivo, locale = locale(encoding = "latin1"))
+  lineas <- read_lines(archivo, locale = locale(encoding = "latin1")) #ponemos el encoding correspondiente
 
   
   # Eliminar líneas en blanco o vacías
@@ -52,9 +51,21 @@ for (archivo in archivos_texto) {
   empresa <- lineas[1]
   direccion <- lineas[2]
   ciudad <- lineas[3]
+  
   telefono_linea <- lineas[grep("TELÉFONO:", lineas)]
   telefono <- substring(telefono_linea, regexpr(":", telefono_linea) + 1)
+  
   fecha <- lineas[5]
+  if (!is.na(fecha)) {
+  partes_fecha_operacion <- strsplit(fecha, "  ")
+  fecha <- partes_fecha_operacion[[1]][1]
+  numero_operacion <- partes_fecha_operacion[[1]][3]
+} else {
+  # Si la fecha no está presente, asignar NA al número de operación
+  fecha <- NA
+  numero_operacion <- NA
+}
+  
   numero_operacion <- lineas[6]
   factura <- lineas[7]
 
