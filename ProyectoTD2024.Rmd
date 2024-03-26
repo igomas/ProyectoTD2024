@@ -12,3 +12,4 @@ knitr::opts_chunk$set(echo = TRUE)
 # Preguntas
 
 1. A qué hora se suele ir más a comprar?
+2. Cuál ha sido la evolución del precio de la leche?
