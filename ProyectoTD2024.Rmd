@@ -9,6 +9,13 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# Introduccion
+
+El conjunto de datos que vamos a utilizar para el análisis de nuestro proyecto pertenecen al supermercado Mercadona. En concreto, son tickets de los usuarios que realizan sus compras en dicho supermercado, que tiene como propósito informar de las compras de dichos usuarios. 
+
+En nuestro caso, hemos decidido hacer la exploración de las horas más concurridas, de la evolución del precio de los productos, del método de pago, del precio medio de la compra y de la media de la cantidad de los productos comprados.
+
+
 # Preguntas
 
 1. A qué hora se suele ir más a comprar?
