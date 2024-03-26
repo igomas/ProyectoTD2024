@@ -15,4 +15,4 @@ knitr::opts_chunk$set(echo = TRUE)
 2. Cuál ha sido la evolución del precio de la leche?
 3. Cuánta gente paga con tarjeta?
 4. Cual es el precio medio de los tickets?
-5. Media de la cantidad de "x producto" en los ultimos meses.
+5. Media de la cantidad de "x producto" en los ultimos meses
