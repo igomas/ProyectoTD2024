@@ -39,7 +39,6 @@ archivos_texto <- list.files(path = carpeta_ruta , pattern = "\\.txt$", full.nam
 
 # Crear una lista para almacenar los datos de cada archivo
 datos <- list()
-
 # Iterar sobre cada archivo en la lista de archivos
 for (archivo in archivos_texto) {
   # Leer las líneas del archivo
@@ -47,6 +46,7 @@ for (archivo in archivos_texto) {
   
   #eliminamos líneas en blanco o vacías
   lineas <- lineas[lineas != ""]
+  
   
   #extraemos la información de las lineas de los archivos donde su contenido se trata    #del mismo
   empresa <- lineas[1]
@@ -59,15 +59,6 @@ for (archivo in archivos_texto) {
   
   #haremos lo mismo con la Fecha
   fecha <- lineas[5]
-  if (!is.na(fecha)) {
-  partes_fecha_operacion <- strsplit(fecha, "  ")
-  fecha <- partes_fecha_operacion[[1]][1]
-  numero_operacion <- partes_fecha_operacion[[1]][3]
-  } else {
-  #si la fecha no está presente, asignar NA al número de operación
-  fecha <- NA
-  numero_operacion <- NA
-  }
  
   #numero_operacion <- lineas[6]
   factura_linea <- lineas[grep("FACTURA SIMPLIFICADA:", lineas)]
@@ -96,7 +87,5 @@ data1 <- bind_rows(datos)
 data1<- separate(data1, Ciudad, into = c("codigo postal", "ciudad"))
 #aqui hemos hecho lo mismo pero con la columna Fecha la cual hemos separado en fecha y hora
 data1 <- separate(data1, Fecha, into = c("fecha", "hora"), sep = "(\\s+|\\s+OP:\\s+)")
-
-
 ```
 
