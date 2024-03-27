@@ -43,30 +43,31 @@ datos <- list()
 # Iterar sobre cada archivo en la lista de archivos
 for (archivo in archivos_texto) {
   # Leer las líneas del archivo
-  lineas <- read_lines(archivo, locale = locale(encoding = "latin1")) #ponemos el     encoding correspondiente
-
   lineas <- read_lines(archivo, locale = locale(encoding = "latin1")) #ponemos el encoding correspondiente
   
-  # Eliminar líneas en blanco o vacías
+  #eliminamos líneas en blanco o vacías
   lineas <- lineas[lineas != ""]
-  # Extraer la información de las lineas de los archivos donde su contenido se trata   #del mismo
+  
+  #extraemos la información de las lineas de los archivos donde su contenido se trata    #del mismo
   empresa <- lineas[1]
   direccion <- lineas[2]
   ciudad <- lineas[3]
+  
   #ajustaremos la forma en la que guarda los datos en la columna Telefono
   telefono_linea <- lineas[grep("TELÉFONO:", lineas)]
   telefono <- substring(telefono_linea, regexpr(":", telefono_linea) + 1)
+  
   #haremos lo mismo con la Fecha
   fecha <- lineas[5]
   if (!is.na(fecha)) {
   partes_fecha_operacion <- strsplit(fecha, "  ")
   fecha <- partes_fecha_operacion[[1]][1]
   numero_operacion <- partes_fecha_operacion[[1]][3]
-} else {
-  # Si la fecha no está presente, asignar NA al número de operación
+  } else {
+  #si la fecha no está presente, asignar NA al número de operación
   fecha <- NA
   numero_operacion <- NA
-}
+  }
  
   #numero_operacion <- lineas[6]
   factura_linea <- lineas[grep("FACTURA SIMPLIFICADA:", lineas)]
@@ -74,7 +75,7 @@ for (archivo in archivos_texto) {
  
   descripcion <- lineas[7]
   
-  # Almacenar la información en un dataframe temporal
+  #almacenamos la información en un dataframe temporal
   df_temporal <- data.frame(Empresa = empresa,
                             Direccion = direccion,
                             Ciudad = ciudad,
@@ -85,7 +86,7 @@ for (archivo in archivos_texto) {
 
 
   
-  # Añadir el dataframe temporal a la lista de datos
+  #añadimos el dataframe temporal a la lista de datos
   datos[[length(datos) + 1]] <- df_temporal
 }
 
