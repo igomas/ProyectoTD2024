@@ -72,7 +72,6 @@ for (archivo in archivos_texto) {
                             Ciudad = ciudad,
                             Telefono = telefono,
                             Fecha = fecha,
-                            Numero_Operacion = numero_operacion,
                             Factura = factura)
 
 
