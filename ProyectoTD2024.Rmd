@@ -44,11 +44,19 @@ for (archivo in archivos_texto) {
   # Leer las líneas del archivo
   lineas <- read_lines(archivo, locale = locale(encoding = "latin1")) #ponemos el encoding correspondiente
   
+  #Los datos que nos interesan del ticket son los que se encuentran hasta la linea donde nos   indica el precio total de la compra realizada, por lo que pondremos que busque la palabra    TOTAl, en la cual nos devolvera el numero donde se encuentra en cada archivo
+  pos_total <- grep("TOTAL", lineas)
+  # Si no se encuentra la palabra "TOTAL", continuar al siguiente archivo
+  if (length(pos_total) == 0) next
+  
+  # Leer solo hasta la posición de "TOTAL"
+  lineas <- lineas[1:(pos_total)]
+  
   #eliminamos líneas en blanco o vacías
   lineas <- lineas[lineas != ""]
   
   
-  #extraemos la información de las lineas de los archivos donde su contenido se trata    #del mismo
+  #extraemos la información de las lineas de los archivos donde su contenido se trata    #del   mismo
   empresa <- lineas[1]
   direccion <- lineas[2]
   ciudad <- lineas[3]
@@ -65,14 +73,23 @@ for (archivo in archivos_texto) {
   factura <- substring(factura_linea, regexpr(":", factura_linea) + 2)
  
   descripcion <- lineas[7]
+  #aqui indicamos que la variable cantidad va desde la linea 8 hasta la penultima de las       lineas que hemos leido de cada archivo, ya que no todos los tickets contienen la misma       cantidad de productos comprados
+  rango <- 8:(length(lineas)-1)
+  cantidad <- lineas[rango]
   
+  #aqui indicamos que el total de la compra se encuentra en la ultima linea de cada archivo
+  rango_total <- length(lineas)
+  total <- lineas[rango_total]
   #almacenamos la información en un dataframe temporal
   df_temporal <- data.frame(Empresa = empresa,
                             Direccion = direccion,
                             Ciudad = ciudad,
                             Telefono = telefono,
                             Fecha = fecha,
-                            Factura = factura)
+                            Factura = factura,
+                            Cantidad = cantidad,
+                            Total = total
+                            )
 
 
   
@@ -86,5 +103,6 @@ data1 <- bind_rows(datos)
 data1<- separate(data1, Ciudad, into = c("codigo postal", "ciudad"))
 #aqui hemos hecho lo mismo pero con la columna Fecha la cual hemos separado en fecha y hora
 data1 <- separate(data1, Fecha, into = c("fecha", "hora"), sep = "(\\s+|\\s+OP:\\s+)")
+
 ```
 
