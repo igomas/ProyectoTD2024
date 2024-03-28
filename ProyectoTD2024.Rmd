@@ -80,6 +80,7 @@ for (archivo in archivos_texto) {
   #aqui indicamos que el total de la compra se encuentra en la ultima linea de cada archivo
   rango_total <- length(lineas)
   total <- lineas[rango_total]
+  
   #almacenamos la información en un dataframe temporal
   df_temporal <- data.frame(Empresa = empresa,
                             Direccion = direccion,
@@ -103,6 +104,7 @@ data1 <- bind_rows(datos)
 data1<- separate(data1, Ciudad, into = c("codigo postal", "ciudad"))
 #aqui hemos hecho lo mismo pero con la columna Fecha la cual hemos separado en fecha y hora
 data1 <- separate(data1, Fecha, into = c("fecha", "hora"), sep = "(\\s+|\\s+OP:\\s+)")
+
 
 ```
 
