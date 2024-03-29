@@ -25,38 +25,39 @@ En nuestro caso, hemos decidido hacer la exploración de las horas más concurri
 5. Media de la cantidad de "x producto" en los ultimos meses
 
 ```{r}
-#Hacemos la importacion de los datos
+#Haremos la importacion de los datos
 #descargaremos las librerias que necesitamos
 library(readr)
 library(dplyr)
 library(tidyr)
 
-#Primero vamos a guardar en una variable la ruta donde se encuentra la carpeta con todos nuestros ficheros
+#Primero vamos a guardar en una variable la ruta donde se encuentra la carpeta con todos los ficheros que utilizaremos
 carpeta_ruta <- ".\\data"
 
-#Ahora declararemos una variable donde usaremos el codigo list.files para obtener una lista de archivos dentro de la carpeta.
+#Ahora declararemos una variable donde usaremos el codigo list.files para obtener una lista de archivos dentro de la carpeta de la cual solo vamos a seleccionar los archivos que sean .txt
 archivos_texto <- list.files(path = carpeta_ruta , pattern = "\\.txt$", full.names = TRUE)
 
-# Crear una lista para almacenar los datos de cada archivo
+# Crearemos una lista donde almacenaremos los datos de cada archivo
 datos <- list()
-# Iterar sobre cada archivo en la lista de archivos
+
+#iniciaremos un bucle, el cual iterara con todos los archivos en la lista de archivos
 for (archivo in archivos_texto) {
-  # Leer las líneas del archivo
+  # Leeremos las líneas del archivo
   lineas <- read_lines(archivo, locale = locale(encoding = "latin1")) #ponemos el encoding correspondiente
   
   #Los datos que nos interesan del ticket son los que se encuentran hasta la linea donde nos   indica el precio total de la compra realizada, por lo que pondremos que busque la palabra    TOTAl, en la cual nos devolvera el numero donde se encuentra en cada archivo
   pos_total <- grep("TOTAL", lineas)
-  # Si no se encuentra la palabra "TOTAL", continuar al siguiente archivo
+  
+  # Si no se encuentra la palabra "TOTAL" pasaremos al siguiente archivo
   if (length(pos_total) == 0) next
   
-  # Leer solo hasta la posición de "TOTAL"
+  #ahora haremos que cada archivo solo  vaya hasta la posicion donde se encuentra TOTAL
   lineas <- lineas[1:(pos_total)]
   
-  #eliminamos líneas en blanco o vacías
+  #eliminaremos las líneas en blanco o vacías
   lineas <- lineas[lineas != ""]
   
-  
-  #extraemos la información de las lineas de los archivos donde su contenido se trata    #del   mismo
+  #como en todos los archivos las primeras lineas contienen la misma informacion,extraemos la   información
   empresa <- lineas[1]
   direccion <- lineas[2]
   ciudad <- lineas[3]
@@ -65,14 +66,14 @@ for (archivo in archivos_texto) {
   telefono_linea <- lineas[grep("TELÉFONO:", lineas)]
   telefono <- substring(telefono_linea, regexpr(":", telefono_linea) + 1)
   
-  #haremos lo mismo con la Fecha
   fecha <- lineas[5]
- 
-  #numero_operacion <- lineas[6]
+  
+  #ajustaremos la forma en la que guarda los datos en la columna Factura
   factura_linea <- lineas[grep("FACTURA SIMPLIFICADA:", lineas)]
   factura <- substring(factura_linea, regexpr(":", factura_linea) + 2)
  
   descripcion <- lineas[7]
+  
   #aqui indicamos que la variable cantidad va desde la linea 8 hasta la penultima de las       lineas que hemos leido de cada archivo, ya que no todos los tickets contienen la misma       cantidad de productos comprados
   rango <- 8:(length(lineas)-1)
   cantidad <- lineas[rango]
@@ -81,8 +82,8 @@ for (archivo in archivos_texto) {
   rango_total <- length(lineas)
   total <- lineas[rango_total]
   
-  #almacenamos la información en un dataframe temporal
-  df_temporal <- data.frame(Empresa = empresa,
+  #almacenaremos la información en un data temporal
+  data1_temporal <- data.frame(Empresa = empresa,
                             Direccion = direccion,
                             Ciudad = ciudad,
                             Telefono = telefono,
@@ -94,17 +95,16 @@ for (archivo in archivos_texto) {
 
 
   
-  #añadimos el dataframe temporal a la lista de datos
-  datos[[length(datos) + 1]] <- df_temporal
+  #añadiremos el data temporal a la lista de datos
+  datos[[length(datos) + 1]] <- data1_temporal
 }
 
-# Concatenar todos los dataframes en uno solo
+# Uniremos todos los datas en uno solo
 data1 <- bind_rows(datos)
 #vamos a separar la columna Ciudad en dos , donde una se llamara codigo postal y otra ciudad
 data1<- separate(data1, Ciudad, into = c("codigo postal", "ciudad"))
 #aqui hemos hecho lo mismo pero con la columna Fecha la cual hemos separado en fecha y hora
 data1 <- separate(data1, Fecha, into = c("fecha", "hora"), sep = "(\\s+|\\s+OP:\\s+)")
-
 
 ```
 
