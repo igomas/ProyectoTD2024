@@ -1,6 +1,6 @@
 ---
 title: "ProyectoTD2024 Grupo F"
-author: "Maria Castellanos, Pablo Pons, Irene Gómez, Jenny Carolina Matamoros, Andreu Herrero"
+author: "Maria Castellanos, Pablo Pons, Irene Gómez, Jenny Carolina Matamoros, Andreu Herrero, Álvaro Cruz"
 date: "2024-03-26"
 output: html_document
 ---
