@@ -105,6 +105,6 @@ data1 <- bind_rows(datos)
 data1<- separate(data1, Ciudad, into = c("codigo postal", "ciudad"))
 #aqui hemos hecho lo mismo pero con la columna Fecha la cual hemos separado en fecha y hora
 data1 <- separate(data1, Fecha, into = c("fecha", "hora"), sep = "(\\s+|\\s+OP:\\s+)")
-
+df <- as.data.frame(data1)
 ```
 
