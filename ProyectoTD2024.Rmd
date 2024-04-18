@@ -108,3 +108,7 @@ data1 <- separate(data1, Fecha, into = c("fecha", "hora"), sep = "(\\s+|\\s+OP:\
 
 ```
 
+
+
+
+
