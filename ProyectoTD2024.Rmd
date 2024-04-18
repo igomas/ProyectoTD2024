@@ -24,13 +24,13 @@ En nuestro caso, hemos decidido hacer la exploración de las horas más concurri
 4. Cual es el precio medio de los tickets?
 5. En que mes se ha comprado más "x producto"?
 
-```{r}
+```{r,warning= F}
 #Haremos la importacion de los datos
 #descargaremos las librerias que necesitamos
 library(readr)
 library(dplyr)
 library(tidyr)
-
+#
 #Primero vamos a guardar en una variable la ruta donde se encuentra la carpeta con todos los ficheros que utilizaremos
 carpeta_ruta <- ".\\data"
 
@@ -105,7 +105,7 @@ data1 <- bind_rows(datos)
 data1<- separate(data1, Ciudad, into = c("codigo postal", "ciudad"))
 #aqui hemos hecho lo mismo pero con la columna Fecha la cual hemos separado en fecha y hora
 data1 <- separate(data1, Fecha, into = c("fecha", "hora"), sep = "(\\s+|\\s+OP:\\s+)")
-
+df <- as.data.frame(data1)
 ```
 
 
