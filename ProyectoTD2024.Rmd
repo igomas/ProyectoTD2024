@@ -1,6 +1,6 @@
 ---
 title: "ProyectoTD2024 Grupo F"
-author: "Maria Castellanos, Pablo Pons, Irene Gómez, Jenny Carolina Matamoros, Andreu Herrero"
+author: "Maria Castellanos, Pablo Pons, Irene Gómez, Jenny Carolina Matamoros, Andreu Herrero, Álvaro Cruz"
 date: "2024-03-26"
 output: html_document
 ---
@@ -19,10 +19,10 @@ En nuestro caso, hemos decidido hacer la exploración de las horas más concurri
 # Preguntas
 
 1. A qué hora se suele ir más a comprar?
-2. Cuál ha sido la evolución del precio de la leche?
-3. Cuánta gente paga con tarjeta?
+2. Cuál ha sido el producto más comprado?
+3. En que Mercadona se realizan más ventas?
 4. Cual es el precio medio de los tickets?
-5. Media de la cantidad de "x producto" en los ultimos meses
+5. En que mes se ha comprado más "x producto"?
 
 ```{r,warning= F}
 #Haremos la importacion de los datos
