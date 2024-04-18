@@ -23,6 +23,7 @@ En nuestro caso, hemos decidido hacer la exploración de las horas más concurri
 3. En que Mercadona se realizan más ventas?
 4. Cual es el precio medio de los tickets?
 5. En que mes se ha comprado más "x producto"?
+6. ¿Cómo ha variado el precio promedio de los productos más vendidos en los últimos meses?
 
 ```{r, warning = F}
 #Haremos la importacion de los datos
