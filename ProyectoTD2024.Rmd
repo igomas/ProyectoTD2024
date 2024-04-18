@@ -28,9 +28,12 @@ En nuestro caso, hemos decidido hacer la exploración de las horas más concurri
 ```{r, warning = F}
 #Haremos la importacion de los datos
 #descargaremos las librerias que necesitamos
-library(readr)
-library(dplyr)
-library(tidyr)
+install.packages("pacman")
+library(pacman)
+p_load(readr, dplyr,tidyr,stringr)
+#library(readr)
+#library(dplyr)
+#library(tidyr)
 #
 #Primero vamos a guardar en una variable la ruta donde se encuentra la carpeta con todos los ficheros que utilizaremos
 carpeta_ruta <- ".\\data"
@@ -79,6 +82,7 @@ for (archivo in archivos_texto) {
   rango <- 8:(length(lineas)-1)
   cantidad <- lineas[rango]
   
+  
   #aqui indicamos que el total de la compra se encuentra en la ultima linea de cada archivo
   rango_total <- length(lineas)
   total <- lineas[rango_total]
@@ -107,6 +111,31 @@ data1<- separate(data1, Ciudad, into = c("codigo postal", "ciudad"))
 #aqui hemos hecho lo mismo pero con la columna Fecha la cual hemos separado en fecha y hora
 data1 <- separate(data1, Fecha, into = c("fecha", "hora"), sep = "(\\s+|\\s+OP:\\s+)")
 df <- as.data.frame(data1)
+
+#Como nos podemos fijar en el data frame la variable de cantidad, no esta ajustada de una forma que nos facilite su importacion en el caso de un futuro analisis, por lo que deberemos ajustarla
+#nos fijamos en que las lineas siguen un formato, estan las cantidades del producto y el producto unidas, por lo que usaremos la funcion gsub para que añada una "/" al principio para que cuando lea y vea que hay un numero seguido de una letra la añada
+datos_cantidades <- gsub("(\\d+)([A-Z])", "\\1/\\2", data1$Cantidad)
+#asignaremos la nueva forma a la variable del dataframe
+data1$Cantidad <- datos_cantidades
+#ahora nos fijamos en que no todas las lineas tiene un numero y una letra justo detras, sino que tiene un numero seguido de un espacio en blanco, haremos lo mismo 
+datos_cantidades2 <- gsub("^([0-9]+) ", "\\1/ ", data1$Cantidad)
+#asignaremos la nueva forma a la variable del dataframe
+data1$Cantidad <- datos_cantidades2
+#ahora podemos usar la funcion separate para poder separar la columna cantidad en dos, la cual una es cantidad y la otra producto, lo cual nos resultara mas facil ya que todos tienen un patron con /
+data1 <- separate(data1, Cantidad, into = c("Cantidad", "Producto"), sep = "/", extra = "merge")
+
+#ahora cambiaremos las comas por los puntos
+producto1 <- gsub(",", ".", data1$Producto)
+#asignaremos el nuevo formato 
+data1$Producto <- producto1
+
+#ahora nos encargaremos de separar la variable producto en producto y precio, ya que como se puede observar ambos estan unidos
+producto_editado <- gsub(" ([0-9]+\\.[0-9]+)$", " /\\1", data1$Producto, perl = TRUE)
+#lo asignaremos al dataframe
+data1$Producto <- producto_editado
+#y como hemos conseguido que sigan un patron lo aprovecharemos para separarlo siguiendo dicha patron
+data1 <- separate(data1, Producto, into = c("Producto", "Precio"), sep = "/(?=[^/]+$)", extra = "merge")
+
 ```
 
 
