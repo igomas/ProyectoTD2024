@@ -24,7 +24,7 @@ En nuestro caso, hemos decidido hacer la exploración de las horas más concurri
 4. Cual es el precio medio de los tickets?
 5. Media de la cantidad de "x producto" en los ultimos meses
 
-```{r}
+```{r,warning= F}
 #Haremos la importacion de los datos
 #descargaremos las librerias que necesitamos
 library(readr)
