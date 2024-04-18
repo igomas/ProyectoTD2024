@@ -28,8 +28,6 @@ En nuestro caso, hemos decidido hacer la exploración de las horas más concurri
 #Haremos la importacion de los datos
 #descargaremos las librerias que necesitamos
 library(readr)
-library(dplyr)
-library(tidyr)
 #
 #Primero vamos a guardar en una variable la ruta donde se encuentra la carpeta con todos los ficheros que utilizaremos
 carpeta_ruta <- ".\\data"
