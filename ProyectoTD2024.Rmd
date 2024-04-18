@@ -20,11 +20,7 @@ En nuestro caso, hemos decidido hacer la exploración de las horas más concurri
 
 1. A qué hora se suele ir más a comprar?
 2. Cuál ha sido el producto más comprado?
-<<<<<<< HEAD
-3. En que Mercadona se han realizado más ventas?
-=======
 3. En que Mercadona se realizan más ventas?
->>>>>>> 7ea6ef5ee7d4836019f4cf469596b369fd92139a
 4. Cual es el precio medio de los tickets?
 5. En que mes se ha comprado más "x producto"?
 
@@ -32,6 +28,8 @@ En nuestro caso, hemos decidido hacer la exploración de las horas más concurri
 #Haremos la importacion de los datos
 #descargaremos las librerias que necesitamos
 library(readr)
+library(dplyr)
+library(tidyr)
 #
 #Primero vamos a guardar en una variable la ruta donde se encuentra la carpeta con todos los ficheros que utilizaremos
 carpeta_ruta <- ".\\data"
