@@ -134,18 +134,42 @@ producto_editado <- gsub(" ([0-9]+\\.[0-9]+)$", " /\\1", data1$Producto, perl = 
 #lo asignaremos al dataframe
 data1$Producto <- producto_editado
 #y como hemos conseguido que sigan un patron lo aprovecharemos para separarlo siguiendo dicha patron
-data1 <- separate(data1, Producto, into = c("Producto", "Precio"), sep = "/(?=[^/]+$)", extra = "merge")
+data1 <- separate(data1, Producto, into = c("Producto", "Precio_Final"), sep = "/(?=[^/]+$)", extra = "merge")
 
 #Visualizando el data frame, se han encontrado algunos errores, por ejemplo en las variables de Cantidad y Producto nos hemos encontrado con alguna fila con los datos de parking de entrada y salida, como en un principio se llego a la idea de no usarlo, mediante la funcion subset eliminaremos del dataframe tanto de la variable Producto como Cantidad todas aquellas filas donde aparezcan las palabras ENTRADA, SALIDA Y PARKING
 data1 <- subset(data1, !grepl("ENTRADA|SALIDA|PARKING", data1$Cantidad, ignore.case = TRUE))
 data1 <- subset(data1, !grepl("ENTRADA|SALIDA|PARKING", data1$Producto, ignore.case = TRUE))
 
-data1$Precio <- as.numeric(data1$Precio)
+# Bucle para reemplazar los NA con el valor de la siguiente fila
+for (i in 1:(nrow(data1) - 1)) {
+  if (is.na(data1$Precio_Final[i])) {
+    data1$Precio_Final[i] <- data1$Precio_Final[i + 1]
+  }
+}
+
+
+# Función para dividir los valores en la columna Cantidad y actualizar Producto
+split_quantity <- function(x, products) {
+  if (grepl("12$", as.character(x))) {
+    return(c(1, paste0(substr(as.character(x), 1, nchar(as.character(x)) - 2), "2")))
+  } else {
+    return(c(x, NA))
+  }
+}
+
+# Aplicar la función a la columna Cantidad
+split_values <- unlist(lapply(data1$Cantidad, split_quantity, data1$Producto))
+
+# Actualizar las columnas Cantidad
+data1$Cantidad <- split_values[seq(1, length(split_values), by = 2)]
+
+#Asignaremos la clase correspondiente a cada variable
+data1$Precio_Final <- as.numeric(data1$Precio_Final)
 data1$codigo_postal<- as.numeric(data1$codigo_postal)
 data1$Telefono <- as.numeric(data1$Telefono)
 data1$Cantidad <- as.numeric(data1$Cantidad)
 data1$fecha <- as.Date(data1$fecha, format = "%d/%m/%Y")
-
+data1 <- data1[complete.cases(data1$Cantidad), ]
 ```
 
 
