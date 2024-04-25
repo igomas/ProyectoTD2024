@@ -107,7 +107,7 @@ for (archivo in archivos_texto) {
 # Uniremos todos los datas en uno solo
 data1 <- bind_rows(datos)
 #vamos a separar la columna Ciudad en dos , donde una se llamara codigo postal y otra ciudad
-data1<- separate(data1, Ciudad, into = c("codigo postal", "ciudad"))
+data1<- separate(data1, Ciudad, into = c("codigo_postal", "ciudad"))
 #aqui hemos hecho lo mismo pero con la columna Fecha la cual hemos separado en fecha y hora
 data1 <- separate(data1, Fecha, into = c("fecha", "hora"), sep = "(\\s+|\\s+OP:\\s+)")
 df <- as.data.frame(data1)
@@ -145,6 +145,7 @@ data1$codigo_postal<- as.numeric(data1$codigo_postal)
 data1$Telefono <- as.numeric(data1$Telefono)
 data1$Cantidad <- as.numeric(data1$Cantidad)
 data1$fecha <- as.Date(data1$fecha, format = "%d/%m/%Y")
+
 ```
 
 
