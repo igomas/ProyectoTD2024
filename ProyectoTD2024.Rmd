@@ -61,7 +61,7 @@ for (archivo in archivos_texto) {
   #eliminaremos las líneas en blanco o vacías
   lineas <- lineas[lineas != ""]
   
-  #como en todos los archivos las primeras lineas contienen la misma informacion,extraemos la   información
+  #como en todos los archivos las primeras lineas contienen la misma informacion,extraemos la      información
   empresa <- lineas[1]
   direccion <- lineas[2]
   ciudad <- lineas[3]
@@ -136,6 +136,15 @@ data1$Producto <- producto_editado
 #y como hemos conseguido que sigan un patron lo aprovecharemos para separarlo siguiendo dicha patron
 data1 <- separate(data1, Producto, into = c("Producto", "Precio"), sep = "/(?=[^/]+$)", extra = "merge")
 
+#Visualizando el data frame, se han encontrado algunos errores, por ejemplo en las variables de Cantidad y Producto nos hemos encontrado con alguna fila con los datos de parking de entrada y salida, como en un principio se llego a la idea de no usarlo, mediante la funcion subset eliminaremos del dataframe tanto de la variable Producto como Cantidad todas aquellas filas donde aparezcan las palabras ENTRADA, SALIDA Y PARKING
+data1 <- subset(data1, !grepl("ENTRADA|SALIDA|PARKING", data1$Cantidad, ignore.case = TRUE))
+data1 <- subset(data1, !grepl("ENTRADA|SALIDA|PARKING", data1$Producto, ignore.case = TRUE))
+
+data1$Precio <- as.numeric(data1$Precio)
+data1$codigo_postal<- as.numeric(data1$codigo_postal)
+data1$Telefono <- as.numeric(data1$Telefono)
+data1$Cantidad <- as.numeric(data1$Cantidad)
+data1$fecha <- as.Date(data1$fecha, format = "%d/%m/%Y")
 ```
 
 
