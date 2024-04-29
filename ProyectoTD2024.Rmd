@@ -28,7 +28,7 @@ En nuestro caso, hemos decidido hacer la exploración de las horas más concurri
 ```{r, warning = F}
 #Haremos la importacion de los datos
 #descargaremos las librerias que necesitamos
-install.packages("pacman")
+#install.packages("pacman")
 library(pacman)
 p_load(readr, dplyr,tidyr,stringr)
 #library(readr)
@@ -157,6 +157,7 @@ split_quantity <- function(x, products) {
   }
 }
 
+
 # Aplicar la función a la columna Cantidad
 split_values <- unlist(lapply(data1$Cantidad, split_quantity, data1$Producto))
 
@@ -170,6 +171,26 @@ data1$Telefono <- as.numeric(data1$Telefono)
 data1$Cantidad <- as.numeric(data1$Cantidad)
 data1$fecha <- as.Date(data1$fecha, format = "%d/%m/%Y")
 data1 <- data1[complete.cases(data1$Cantidad), ]
+
+
+
+#otra opcion para el precio producto
+precio_producto <- unlist(strsplit(data1$Cantidad[i], " "))
+        
+        if ( grepl(',[0-9][0-9]$', data1$Producto[i]) & substr(data1$Producto[i],1,1) > 1 ) {
+          nombre_producto <- unlist( strsplit(nombre_producto, ' ') )
+          nombre_producto <- paste0( nombre_producto[1:(length(nombre_producto)-1)], collapse = ' ')
+          
+          precio_producto <- precio_producto[(length(precio_producto)-1)]
+        
+        } else {
+          precio_producto <- precio_producto[length(precio_producto)]
+        }
+        
+        precio_producto <- gsub(",",".", precio_producto)
+        precio_producto <- as.numeric(precio_producto)
+
+
 ```
 
 
