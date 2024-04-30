@@ -138,6 +138,8 @@ data1$Producto <- producto_editado
 indices2_kg <-  which(str_detect(data1$Cantidad, "kg"))
 #guardaremos en una variable los valores que se encuentran en cada indice de la columna Cantidad
 precios2_kg <- data1$Cantidad[indices_kg]
+#eliminar el final
+precios2_kg <- gsub("\u0080", "", precios2_kg)
 #Como se puede observar la fruta correspondiente al precio por kilo se encuentra en la fila anterior, por lo que haremos una variable con todos esos indices menos uno (anterior)
 indice_anterior_kg <- indices2_kg - 1
 
