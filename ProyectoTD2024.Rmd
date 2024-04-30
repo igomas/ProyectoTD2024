@@ -171,6 +171,24 @@ data1$Cantidad <- as.numeric(data1$Cantidad)
 data1$fecha <- as.Date(data1$fecha, format = "%d/%m/%Y")
 data1 <- data1[complete.cases(data1$Cantidad), ]
 #
+
+
+#otra forma para lo del producto
+precio_producto <- unlist(strsplit(Cantidad[i], " "))
+        
+        if ( grepl(',[0-9][0-9]$', Producto[i]) & substr(Producto[i],1,1) > 1 ) {
+          nombre_producto <- unlist( strsplit(nombre_producto, ' ') )
+          nombre_producto <- paste0( nombre_producto[1:(length(nombre_producto)-1)], collapse = ' ')
+          
+          precio_producto <- precio_producto[(length(precio_producto)-1)]
+        
+        } else {
+          precio_producto <- precio_producto[length(precio_producto)]
+        }
+        
+        precio_producto <- gsub(",",".", precio_producto)
+        precio_producto <- as.numeric(precio_producto)
+        
 ```
 
 
