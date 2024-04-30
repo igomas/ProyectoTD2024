@@ -187,6 +187,14 @@ data1$Telefono <- as.numeric(data1$Telefono)
 data1$Cantidad <- as.numeric(data1$Cantidad)
 data1$fecha <- as.Date(data1$fecha, format = "%d/%m/%Y")
 data1 <- data1[complete.cases(data1$Cantidad), ]
+
+#ahora arreglaremos los valores de la columna "Total" y lo convertiremos al tipo de variable que corresponde
+datos_total <- data1$Total
+datos_total<- gsub("[^0-9,]", "", datos_total)
+data1$Total <-datos_total
+#ahora cambiaremos las comas por los puntos
+data1$Total <- gsub(",", ".", data1$Total)
+data1$Total<- as.numeric(data1$Total)
         
 ```
 
