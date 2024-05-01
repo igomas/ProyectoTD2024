@@ -186,6 +186,7 @@ data1$Total <- gsub(",", ".", data1$Total)
 data1$Total<- as.numeric(data1$Total)
 
 ```
+
 ```{r}
 #convertimos los números en cadenas de texto
 cantidades_texto <- as.character(data1$Cantidad)
@@ -259,6 +260,10 @@ data1$Producto[indices2_cierrafacil] <- producto4_completo
 
 data1$Cantidad <- gsub("140$", "1", data1$Cantidad)
 data1$Cantidad <- as.numeric(data1$Cantidad)
+
+#cambiamos puntos por comas en el Producto
+data1$Producto <- gsub("\\.", ",", data1$Producto)
+
 ```
 
 
