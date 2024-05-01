@@ -35,14 +35,14 @@ p_load(readr, dplyr,tidyr,stringr)
 #library(readr)
 #library(dplyr)
 #library(tidyr)
-#
+
 #Primero vamos a guardar en una variable la ruta donde se encuentra la carpeta con todos los ficheros que utilizaremos
 carpeta_ruta <- ".\\data"
 
 #Ahora declararemos una variable donde usaremos el codigo list.files para obtener una lista de archivos dentro de la carpeta de la cual solo vamos a seleccionar los archivos que sean .txt
 archivos_texto <- list.files(path = carpeta_ruta , pattern = "\\.txt$", full.names = TRUE)
 
-# Crearemos una lista donde almacenaremos los datos de cada archivo
+#crearemos una lista donde almacenaremos los datos de cada archivo
 datos <- list()
 
 #iniciaremos un bucle, el cual iterara con todos los archivos en la lista de archivos
@@ -50,10 +50,12 @@ for (archivo in archivos_texto) {
   # Leeremos las líneas del archivo
   lineas <- read_lines(archivo, locale = locale(encoding = "latin1")) #ponemos el encoding correspondiente
   
-  #Los datos que nos interesan del ticket son los que se encuentran hasta la linea donde nos   indica el precio total de la compra realizada, por lo que pondremos que busque la palabra    TOTAl, en la cual nos devolvera el numero donde se encuentra en cada archivo
+  #Los datos que nos interesan del ticket son los que se encuentran hasta la linea donde nos indica el precio total de la compra realizada, 
+  #por lo que pondremos que busque la palabra    
+  #TOTAl, en la cual nos devolvera el numero donde se encuentra en cada archivo
   pos_total <- grep("TOTAL", lineas)
   
-  # Si no se encuentra la palabra "TOTAL" pasaremos al siguiente archivo
+  #si no se encuentra la palabra "TOTAL" pasaremos al siguiente archivo
   if (length(pos_total) == 0) next
   
   #ahora haremos que cada archivo solo  vaya hasta la posicion donde se encuentra TOTAL
@@ -79,7 +81,9 @@ for (archivo in archivos_texto) {
  
   descripcion <- lineas[7]
   
-  #aqui indicamos que la variable cantidad va desde la linea 8 hasta la penultima de las       lineas que hemos leido de cada archivo, ya que no todos los tickets contienen la misma       cantidad de productos comprados
+  #aqui indicamos que la variable cantidad va desde la linea 8 hasta la penultima de las 
+  #lineas que hemos leido de cada archivo, ya que no todos los tickets contienen la misma 
+  #cantidad de productos comprados
   rango <- 8:(length(lineas)-1)
   cantidad <- lineas[rango]
   
@@ -105,7 +109,7 @@ for (archivo in archivos_texto) {
   datos[[length(datos) + 1]] <- data1_temporal
 }
 
-# Uniremos todos los datas en uno solo
+#uniremos todos los datas en uno solo
 data1 <- bind_rows(datos)
 #vamos a separar la columna Ciudad en dos , donde una se llamara codigo postal y otra ciudad
 data1<- separate(data1, Ciudad, into = c("codigo_postal", "ciudad"))
