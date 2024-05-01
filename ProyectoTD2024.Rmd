@@ -187,10 +187,10 @@ data1$Total<- as.numeric(data1$Total)
 
 ```
 ```{r}
-# Convertir los números en cadenas de texto
+#convertimos los números en cadenas de texto
 cantidades_texto <- as.character(data1$Cantidad)
 
-# Filtrar los índices donde los números terminan en "100"
+#filtramos los índices donde los números terminan en "100"
 indices_pan <- which(grepl("100$", cantidades_texto))
 pan <- data1$Cantidad[indices_pan]
 sin_ultimos_tres <- as.numeric(substr(pan, 1, nchar(pan) - 3))
@@ -201,13 +201,14 @@ ultimos_tres_numeros <- substr(pan, nchar(pan) - 2, nchar(pan))
 indices2_pan <- indices_pan
 pan2 <- data1$Producto[indices2_pan]
 producto1_completo <- paste(ultimos_tres_numeros, pan2, sep = " ")
+
 #asignaremos a las filas de cada producto segun el indice en que localizamos donde estaban los nuevos productos completos
 data1$Producto[indices2_pan] <- producto1_completo
 
-# Convertir los números en cadenas de texto
+#convertir los números en cadenas de texto
 cantidades_texto <- as.character(data1$Cantidad)
 
-# Filtrar los índices donde los números terminan en "200"
+#filtrar los índices donde los números terminan en "200"
 indices_servilletas <- which(grepl("200$", cantidades_texto))
 
 
@@ -221,6 +222,7 @@ ultimos_tres_numeros2 <- substr(servilleta, nchar(servilleta) - 2, nchar(servill
 indices2_servilletas <- indices_servilletas
 servilleta2 <- data1$Producto[indices2_servilletas]
 producto2_completo <- paste(ultimos_tres_numeros2, servilleta2, sep = " ")
+
 #asignaremos a las filas de cada producto segun el indice en que localizamos donde estaban los nuevos productos completos
 data1$Producto[indices2_servilletas] <- producto2_completo
 
