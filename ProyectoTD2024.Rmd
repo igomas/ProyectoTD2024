@@ -356,7 +356,9 @@ print(paste("El precio medio de los tickets es",media_total))
 
 ```{r}
 #Primero utilizo la funcion filter para eliminar todos los posibles na que haya en la columna Cantidad, ya que no podría trabajar con ellos.
-data_clear_producto %>% filter(!is.na(Cantidad))
+data_clear_producto %>% filter(!is.na(Cantidad)) %>% 
+  #utilizamos el mutate para crear nuestra variable mes compra y referirnos a que es el mes de la fecha de nuestro ticket
+  mutate(mes_compra = month(fecha)) %>% 
 
 
 ```
