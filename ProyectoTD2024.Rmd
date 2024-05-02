@@ -264,9 +264,11 @@ data1$Cantidad <- as.numeric(data1$Cantidad)
 #cambiamos puntos por comas en el Producto
 data1$Producto <- gsub("\\.", ",", data1$Producto)
 
+
 ```
 
 
+1. A qué hora se suele ir más a comprar?
 
 
 
