@@ -359,6 +359,8 @@ print(paste("El precio medio de los tickets es",media_total))
 data_clear_producto %>% filter(!is.na(Cantidad)) %>% 
   #utilizamos el mutate para crear nuestra variable mes compra y referirnos a que es el mes de la fecha de nuestro ticket
   mutate(mes_compra = month(fecha)) %>% 
+  #como queremos ver para cada producto y para cada mes cuanto se han comprado, agrupamos por producto y por mes
+  group_by(Producto, mes_compra) %>% 
 
 
 ```
