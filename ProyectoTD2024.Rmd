@@ -352,4 +352,12 @@ media_total <- mean(valores_unicos)
 print(paste("El precio medio de los tickets es",media_total))
 ```
 
+5. En que mes se ha comprado más "x producto"?
+
+```{r}
+#Primero utilizo la funcion filter para eliminar todos los posibles na que haya en la columna Cantidad, ya que no podría trabajar con ellos.
+data_clear_producto %>% filter(!is.na(Cantidad))
+
+
+```
 
