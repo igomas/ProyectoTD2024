@@ -288,12 +288,13 @@ print(paste("La hora media del día a la que se suele ir mas a menudo a comprar 
 3. En que Mercadona se realizan más ventas?
 
 ```{r}
+#contamos el número de compras por Mercadona
 compras_merc <- data1 %>%
-  group_by(Direccion, Total) %>%
+  group_by(Direccion, Total) %>% #agrupamos
   summarise(.groups = "drop") %>% 
   ungroup() %>%
-  count(Direccion) %>% #
-  arrange(desc(n))
+  count(Direccion) %>% #contamos
+  arrange(desc(n)) #ordenamos de forma descendente
 
 ```
 
