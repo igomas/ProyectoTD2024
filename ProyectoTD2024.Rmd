@@ -291,7 +291,13 @@ conteo_productos <- data1 %>%
   group_by(Producto) %>% 
   summarise(Cantidad_Total = sum(Cantidad, na.rm = TRUE)) %>% 
   arrange(desc(Cantidad_Total))
-
+# Crear un gráfico de barras
+ggplot(conteo_productos[1:10,], aes(x = reorder(Producto, -Cantidad_Total), y = Cantidad_Total)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  coord_flip() +
+  ylim(0,20)+
+  labs(x = "Producto", y = "Cantidad Total", title = "Top 10 Productos Más Comprados") +
+  theme_minimal()
 ```
 
 
