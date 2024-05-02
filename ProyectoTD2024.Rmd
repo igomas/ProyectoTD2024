@@ -363,7 +363,8 @@ data_clear_producto %>% filter(!is.na(Cantidad)) %>%
   group_by(Producto, mes_compra) %>%
 #utilizamos el summarise porque  queremos saber para cada producto, y cada mes, la cantidad de veces se ha comprado ese producto
   summarise(suma_cantidad = sum(Cantidad)) %>% 
-  
+#utilizamos el mutate y creamos la variable maximo cant que es para cada producto obtener el maximo que se ha comprado en un mes
+  mutate(maximo_cant = max(suma_cantidad))%>% 
   
 
 ```
