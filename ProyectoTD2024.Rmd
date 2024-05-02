@@ -274,6 +274,9 @@ data1$Producto <- gsub("\\.", ",", data1$Producto)
 horas <- as.numeric(sub("^(\\d+):(\\d+)$", "\\1", data1$hora))
 minutos <- as.numeric(sub("^(\\d+):(\\d+)$", "\\2", data1$hora))
 
+# Calcular la media de las horas y los minutos
+media_horas <- as.integer(mean(horas))
+media_minutos <- as.integer(mean(minutos))
 ```
 
 
