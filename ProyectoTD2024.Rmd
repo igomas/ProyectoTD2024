@@ -296,6 +296,16 @@ compras_merc <- data1 %>%
   count(Direccion) %>% #contamos
   arrange(desc(n)) #ordenamos de forma descendente
 
+
+ggplot(data = compras_merc, aes(x = reorder(Direccion, n), y = n)) +
+  geom_bar(stat = "identity", fill = "skyblue", color = "blue") +
+  labs(
+    title = "Número de Compras por Mercadona",
+    x = "Sucursal de Mercadona",
+    y = "Número de Compras"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
 ```
 
 
