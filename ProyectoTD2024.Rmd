@@ -328,6 +328,28 @@ ggplot(data = compras_merc, aes(x = reorder(Direccion, n), y = n)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) #rotamos las etiquetas
 
 ```
+4. Cual es el precio medio de los tickets?
+```{r}
+library(ggplot2)
+#usaremos una grafica para visualizar los precios de los ticktes y sus fechas
+# Calcula los totales más caros y más bajos
+precio_max <- max(data1$Total)
+precio_min <- min(data1$Total)
 
+# Graficar usando ggplot2
+ggplot(data = data1, aes(x = fecha, y = Total)) +
+  geom_line(color = "magenta") + # Línea de color rosa
+  geom_point(data = subset(data1, Total == precio_max), aes(color = "purple"), size = 1.5) + # Puntos morados para los totales más caros
+  geom_point(data = subset(data1, Total == precio_min), aes(color = "blue"), size = 1.5) + # Puntos azules para los totales más bajos
+  scale_x_date(date_labels = "%d %b %Y", date_breaks = "1 month") + # Formato de fecha en día mes año
+  labs(x = "Fecha", y = "Total") + # Etiquetas de los ejes
+  ggtitle("Total vs. Fecha") + # Título del gráfico
+  scale_color_manual(name = "Precio", values = c(purple = "purple", blue = "blue")) # Personalización de los colores de los puntos
+
+#Para calcular la media de los precios de los tickets
+valores_unicos <- unique(data1$Total)
+media_total <- mean(valores_unicos)
+print(paste("El precio medio de los tickets es",media_total))
+```
 
 
