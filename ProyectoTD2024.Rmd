@@ -365,6 +365,8 @@ data_clear_producto %>% filter(!is.na(Cantidad)) %>%
   summarise(suma_cantidad = sum(Cantidad)) %>% 
 #utilizamos el mutate y creamos la variable maximo cant que es para cada producto obtener el maximo que se ha comprado en un mes
   mutate(maximo_cant = max(suma_cantidad))%>% 
+  #por último con filter nos quedamos solo con los productos cuya cantidad sea igual que a la maxima comprada de este producto, y así será la cantidad máxima comprada de este producto en cada mes.
+  filter(maximo_cant == suma_cantidad)
   
 
 ```
