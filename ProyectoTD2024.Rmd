@@ -283,6 +283,21 @@ media_minutos <- as.integer(mean(minutos))
 print(paste("La hora media del día a la que se suele ir mas a menudo a comprar es:",
             media_horas, ":", media_minutos))
 ```
+
+```{r}
+library(ggplot2)
+# Crear un histograma de las horas de compra
+ggplot(data1, aes(x = as.numeric(sub("^(\\d+):(\\d+)$", "\\1", hora)))) +
+  geom_histogram(binwidth = 1, fill = "skyblue", color = "black") +
+  labs(title = "Distribución de las horas de compra",
+       x = "Hora",
+       y = "Frecuencia") +
+  theme_minimal() +
+  # Agregar una línea vertical en la hora media del día
+  geom_vline(xintercept = mean(as.numeric(sub("^(\\d+):(\\d+)$", "\\1", data1$hora))), 
+             color = "red", linetype = "dashed", size = 1)
+```
+
 2. Cuál ha sido el producto más comprado?
 ```{r}
 
