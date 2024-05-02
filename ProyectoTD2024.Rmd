@@ -269,6 +269,12 @@ data1$Producto <- gsub("\\.", ",", data1$Producto)
 
 
 1. A qué hora se suele ir más a comprar?
+```{r}
+# Separar las horas y los minutos
+horas <- as.numeric(sub("^(\\d+):(\\d+)$", "\\1", data1$hora))
+minutos <- as.numeric(sub("^(\\d+):(\\d+)$", "\\2", data1$hora))
+
+```
 
 
 
