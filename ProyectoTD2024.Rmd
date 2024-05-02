@@ -360,8 +360,11 @@ data_clear_producto %>% filter(!is.na(Cantidad)) %>%
   #utilizamos el mutate para crear nuestra variable mes compra y referirnos a que es el mes de la fecha de nuestro ticket
   mutate(mes_compra = month(fecha)) %>% 
   #como queremos ver para cada producto y para cada mes cuanto se han comprado, agrupamos por producto y por mes
-  group_by(Producto, mes_compra) %>% 
-
+  group_by(Producto, mes_compra) %>%
+#utilizamos el summarise porque  queremos saber para cada producto, y cada mes, la cantidad de veces se ha comprado ese producto
+  summarise(suma_cantidad = sum(Cantidad)) %>% 
+  
+  
 
 ```
 
