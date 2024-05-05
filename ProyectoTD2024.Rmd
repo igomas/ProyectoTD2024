@@ -394,11 +394,36 @@ data_clear_producto %>% filter(!is.na(Cantidad)) %>%
 6.  ¿Cómo ha variado el precio promedio de los productos más vendidos en los últimos meses?
 
 ```{r}
-library(tidyverse)
-library(lubridate)
-# Nos quedamos con las columnas Cantidad,Producto y Precio_Final 
-precio <- data1%>% select(c("Cantidad","Producto","Precio_Final")) 
 
+library(dplyr)
+library(ggplot2)
+
+# Nos quedamos con las columnas Cantidad,Producto y Precio_Final 
+ventas <- data1%>% select(c("Cantidad","Producto","Precio_Final","fecha")) 
+
+# Calculamos el precio promedio por producto y mes
+precio_promedio_por_producto_mes <- ventas %>%
+  mutate(mes = format(fecha, "%Y-%m")) %>%
+  group_by(Producto, mes) %>%
+  summarise(precio_promedio = mean(Precio_Final, na.rm = TRUE), .groups = "drop")
+
+# Encontramos los productos más vendidos
+productos_mas_vendidos <- precio_promedio_por_producto_mes %>%
+  group_by(Producto) %>%
+  summarise(ventas_totales = sum(precio_promedio)) %>%
+  top_n(5, ventas_totales)
+
+# Filtramos las ventas para los productos más vendidos
+ventas_productos_mas_vendidos <- ventas %>%
+  filter(Producto %in% productos_mas_vendidos$Producto)
+
+# Visualizamos la evolución del precio promedio de los productos más vendidos en los últimos meses
+ggplot(precio_promedio_por_producto_mes, aes(x = mes, y = precio_promedio, color = Producto)) +
+  geom_line() +
+  labs(title = "Evolución del Precio Promedio de los Productos Más Vendidos",
+       x = "Mes",
+       y = "Precio Promedio") +
+  theme_minimal()
 
 
 
