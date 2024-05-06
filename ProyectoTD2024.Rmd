@@ -437,7 +437,15 @@ Funcion para seleccionar las variables tipo numericas
 
 
 data_numericas<- data1 %>% select_if(is.numeric)
-data_numericas
 
+
+df_numericas_unicas <- data_numericas %>% distinct()
+df_numericas_unicas
+```
+
+Funcion para seleccionar las variables tipo categoricas
+```{r}
+data_numericas<- data1 %>% select_if(is.character)
+data_numericas
 ```
 
