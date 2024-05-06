@@ -445,7 +445,14 @@ df_numericas_unicas
 
 Funcion para seleccionar las variables tipo categoricas
 ```{r}
-data_numericas<- data1 %>% select_if(is.character)
-data_numericas
+data_categoricas<- data1 %>% select_if(is.character)
+data_categoricas
+```
+
+Funcion para seleccionar las variables tipo fecha
+
+```{r}
+data_fechas<- data1 %>% select_if(is.Date)
+data_fechas
 ```
 
