@@ -454,5 +454,7 @@ Funcion para seleccionar las variables tipo fecha
 ```{r}
 data_fechas<- data1 %>% select_if(is.Date)
 data_fechas
+
+
 ```
 
