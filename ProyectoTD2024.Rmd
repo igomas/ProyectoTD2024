@@ -17,6 +17,7 @@ En nuestro caso, hemos decidido hacer la exploración de las horas más concurri
 
 # Preguntas
 
+
 1.  A qué hora se suele ir más a comprar?
 2.  Cuál ha sido el producto más comprado?
 3.  En que Mercadona se realizan más ventas?
@@ -429,3 +430,14 @@ ggplot(precio_promedio_por_producto_mes, aes(x = mes, y = precio_promedio, color
 
 
 ```
+
+Funcion para seleccionar las variables tipo numericas
+
+```{r}
+
+
+data_numericas<- data1 %>% select_if(is.numeric)
+data_numericas
+
+```
+
