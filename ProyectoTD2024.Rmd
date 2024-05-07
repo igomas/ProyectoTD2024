@@ -292,6 +292,27 @@ indices2_codorniz <- indices_codorniz
 codorniz2 <- data1$Producto[indices2_codorniz]
 producto5_completo <- paste(ultimos_dos_numeros2, codorniz2, sep = " ")
 data1$Producto[indices2_codorniz] <- producto5_completo
+
+palabra1 <- "TROCEADO"
+palabra2 <- "PARTIDO"
+medio_troceado <- which(str_detect(data1$Producto, paste(palabra1, palabra2, sep = "|") ))
+
+producto_medio <- data1$Producto[medio_troceado]
+
+# Función para modificar el texto según las condiciones dadas
+convertir_texto_medio <- function(texto) {
+  # Verificar si hay dos números al principio
+  if (str_detect(texto, "^\\d{2}")) {
+    # Reemplazar los dos números con "1/2"
+    nuevo_texto <- str_replace(texto, "^\\d{2}", "1/2")
+    return(nuevo_texto)
+  }
+  return(texto)  # Devolver el texto original si no cumple las condiciones
+}
+
+# Aplicar la función al vector
+producto_medio_modificado <- sapply(producto_medio, convertir_texto_medio)
+data1$Producto[medio_troceado]<- producto_medio_modificado
 ```
 
 1.  A qué hora se suele ir más a comprar?
