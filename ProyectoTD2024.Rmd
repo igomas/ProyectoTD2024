@@ -157,13 +157,22 @@ data1$Producto[indice_anterior_kg] <- producto_completo
 #y como hemos conseguido que sigan un patron lo aprovecharemos para separarlo siguiendo dicha patron
 data1 <- separate(data1, Producto, into = c("Producto", "Precio_Final"), sep = "/(?=[^/]+$)", extra = "merge")
 
+#ajuste producto pollo y conejo
 palabra1 <- "TROCEADO"
 palabra2 <- "PARTIDO"
 medio_troceado <- which(str_detect(data1$Producto, paste(palabra1, palabra2, sep = "|") ))
-medio_troceado
 
 cantidad_medio_troceado <-data1$Cantidad[medio_troceado] 
-cantidad_medio_troceado
+
+producto_medio <- data1$Producto[medio_troceado]
+
+filtrados <- ifelse(nchar(cantidad_medio_troceado) > 1, substr(cantidad_medio_troceado, 1, nchar(cantidad_medio_troceado) - 1), cantidad_medio_troceado)
+ 
+ultimos <- ifelse(nchar(cantidad_medio_troceado) > 1, substr(cantidad_medio_troceado, nchar(cantidad_medio_troceado), nchar(cantidad_medio_troceado)), NA)
+
+data1$Cantidad[medio_troceado] <- filtrados
+na_indices <- which(!is.na(ultimos))
+data1$Producto[medio_troceado[na_indices]] <- paste(ultimos[na_indices],data1$Producto[medio_troceado[na_indices]], sep = "")
 
 #Visualizando el data frame, se han encontrado algunos errores, por ejemplo en las variables de Cantidad y Producto nos hemos encontrado con alguna fila con los datos de parking de entrada y salida, como en un principio se llego a la idea de no usarlo, mediante la funcion subset eliminaremos del dataframe tanto de la variable Producto como Cantidad todas aquellas filas donde aparezcan las palabras ENTRADA, SALIDA Y PARKING
 data1 <- subset(data1, !grepl("ENTRADA|SALIDA|PARKING", data1$Cantidad, ignore.case = TRUE))
