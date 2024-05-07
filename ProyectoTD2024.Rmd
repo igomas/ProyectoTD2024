@@ -263,7 +263,18 @@ data1$Cantidad <- as.numeric(data1$Cantidad)
 #cambiamos puntos por comas en el Producto
 data1$Producto <- gsub("\\.", ",", data1$Producto)
 
+cantidades_texto <- as.character(data1$Cantidad)
+indices_codorniz <- which(grepl("18$", cantidades_texto))
+codorniz <- data1$Cantidad[indices_codorniz]
 
+sin_ultimos_dos2 <- as.numeric(substr(codorniz, 1, nchar(codorniz) - 2))
+data1$Cantidad[indices_codorniz] <-sin_ultimos_dos2
+
+ultimos_dos_numeros2 <- substr(codorniz, nchar(codorniz) - 1, nchar(codorniz))
+indices2_codorniz <- indices_codorniz
+codorniz2 <- data1$Producto[indices2_codorniz]
+producto5_completo <- paste(ultimos_dos_numeros2, codorniz2, sep = " ")
+data1$Producto[indices2_codorniz] <- producto5_completo
 ```
 
 1.  A qué hora se suele ir más a comprar?
