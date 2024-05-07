@@ -426,25 +426,32 @@ ggplot(data = compras_merc, aes(x = reorder(Direccion, n), y = n)) +
 
 ```{r}
 library(ggplot2)
-#usaremos una grafica para visualizar los precios de los ticktes y sus fechas
-# Calcula los totales más caros y más bajos
-precio_max <- max(data1$Total)
-precio_min <- min(data1$Total)
+maximo_valor <-  max(data1$Total)
+minimo_valor <- min(data1$Total)
+media_valor <- mean(unique(data1$Total))
+#cogeremos valores no repetidos
+valores_no_repetidos <- unique(data1$Total)
 
-# Graficar usando ggplot2
-ggplot(data = data1, aes(x = fecha, y = Total)) +
-  geom_line(color = "magenta") + # Línea de color rosa
-  geom_point(data = subset(data1, Total == precio_max), aes(color = "purple"), size = 1.5) + # Puntos morados para los totales más caros
-  geom_point(data = subset(data1, Total == precio_min), aes(color = "blue"), size = 1.5) + # Puntos azules para los totales más bajos
-  scale_x_date(date_labels = "%d %b %Y", date_breaks = "1 month") + # Formato de fecha en día mes año
-  labs(x = "Fecha", y = "Total") + # Etiquetas de los ejes
-  ggtitle("Total vs. Fecha") + # Título del gráfico
-  scale_color_manual(name = "Precio", values = c(purple = "purple", blue = "blue")) # Personalización de los colores de los puntos
+# Crear intervalos de precio
+intervalos <- seq(0, ceiling(max(valores_no_repetidos)/10)*10, by = 10)
 
-#Para calcular la media de los precios de los tickets
-valores_unicos <- unique(data1$Total)
-media_total <- mean(valores_unicos)
-print(paste("El precio medio de los tickets es",media_total))
+# Agrupar los datos por intervalos de precio y contar la cantidad de tickets en cada intervalo
+data_agrupada <- data.frame(total = valores_no_repetidos) %>%
+  mutate(intervalo_precio = cut(total, breaks = intervalos, right = FALSE)) %>%
+  group_by(intervalo_precio) %>%
+  summarise(cantidad_tickets = n_distinct(total))
+
+# Crear el diagrama de barras
+ggplot(data_agrupada, aes(x = intervalo_precio, y = cantidad_tickets)) +
+  geom_bar(stat = "identity", fill = "skyblue", color = "black") +
+  labs(title = "Cantidad de Tickets por Intervalo de Precio",
+       x = "Intervalo de Precio",
+       y = "Cantidad de Tickets") +
+  theme_minimal()
+
+print(paste("El ticket con mayor precio es de",maximo_valor))
+print(paste("El ticket con menor precio es de",minimo_valor))
+print(paste("El precio medio de los tickets es",media_valor))
 ```
 
 5.  En que mes se ha comprado más "x producto"?
