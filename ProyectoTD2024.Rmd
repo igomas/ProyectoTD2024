@@ -293,9 +293,21 @@ codorniz2 <- data1$Producto[indices2_codorniz]
 producto5_completo <- paste(ultimos_dos_numeros2, codorniz2, sep = " ")
 data1$Producto[indices2_codorniz] <- producto5_completo
 
-palabra1 <- "TROCEADO"
-palabra2 <- "PARTIDO"
-medio_troceado <- which(str_detect(data1$Producto, paste(palabra1, palabra2, sep = "|") ))
+
+cantidades_texto <- as.character(data1$Cantidad)
+indices_codorniz <- which(grepl("18$", cantidades_texto))
+codorniz <- data1$Cantidad[indices_codorniz]
+
+sin_ultimos_dos2 <- as.numeric(substr(codorniz, 1, nchar(codorniz) - 2))
+data1$Cantidad[indices_codorniz] <-sin_ultimos_dos2
+
+ultimos_dos_numeros2 <- substr(codorniz, nchar(codorniz) - 1, nchar(codorniz))
+indices2_codorniz <- indices_codorniz
+codorniz2 <- data1$Producto[indices2_codorniz]
+producto5_completo <- paste(ultimos_dos_numeros2, codorniz2, sep = " ")
+data1$Producto[indices2_codorniz] <- producto5_completo
+
+medio_troceado <- which(str_detect(data1$Producto, paste("TROCEADO","PARTIDO", sep = "|") ))
 
 producto_medio <- data1$Producto[medio_troceado]
 
@@ -314,6 +326,25 @@ convertir_texto_medio <- function(texto) {
 producto_medio_modificado <- sapply(producto_medio, convertir_texto_medio)
 data1$Producto[medio_troceado]<- producto_medio_modificado
 ```
+
+```{r}
+cantidades_texto <- as.character(data1$Cantidad)
+
+indice_toallitas <- which(str_detect(data1$Producto, "TOALLITAS"))
+indices_toallitas <- which(grepl("50$", cantidades_texto))
+toallitas <- data1$Cantidad[indices_toallitas]
+
+sin_ultimos_dos2 <- as.numeric(substr(toallitas, 1, nchar(toallitas) - 2))
+data1$Cantidad[indices_toallitas] <-sin_ultimos_dos2
+
+ultimos_dos_numeros2 <- substr(toallitas, nchar(toallitas) - 1, nchar(toallitas))
+indices2_toallitas <- indices_toallitas
+toallitas2 <- data1$Producto[indices2_toallitas]
+producto7_completo <- paste(ultimos_dos_numeros2, toallitas2, sep = " ")
+data1$Producto[indices2_toallitas] <- producto7_completo
+
+```
+
 
 1.  A qué hora se suele ir más a comprar?
 
