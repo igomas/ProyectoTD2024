@@ -425,7 +425,4 @@ ggplot(precio_promedio_por_producto_mes, aes(x = mes, y = precio_promedio, color
        y = "Precio Promedio") +
   theme_minimal()
 
-
-
-
 ```
