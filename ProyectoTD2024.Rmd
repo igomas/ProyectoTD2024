@@ -479,7 +479,7 @@ data_clear_producto %>% filter(!is.na(Cantidad)) %>%
 
 ```
 
-6.  ¿Cómo ha variado el precio promedio de los productos más vendidos en los últimos meses?
+6.  ¿Cómo ha variado el precio de los productos más vendidos en los últimos meses?
 
 ```{r}
 
@@ -506,14 +506,16 @@ ventas_productos_mas_vendidos <- ventas %>%
   filter(Producto %in% productos_mas_vendidos$Producto)
 
 # Visualizamos la evolución del precio promedio de los productos más vendidos en los últimos meses
-ggplot(precio_promedio_por_producto_mes, aes(x = mes, y = precio_promedio, color = Producto)) +
+ggplot(ventas_productos_mas_vendidos, aes(x = fecha, y = Precio_Final, color = Producto)) +
   geom_line() +
   labs(title = "Evolución del Precio Promedio de los Productos Más Vendidos",
-       x = "Mes",
+       x = "Fecha",
        y = "Precio Promedio") +
-  theme_minimal()
+  theme_minimal()+
+  ylim(1, NA)
 
 ```
+
 
 Funcion para seleccionar las variables tipo numericas
 
