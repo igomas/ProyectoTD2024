@@ -443,7 +443,7 @@ data_agrupada <- data.frame(total = valores_no_repetidos) %>%
 
 # Crear el diagrama de barras
 ggplot(data_agrupada, aes(x = intervalo_precio, y = cantidad_tickets)) +
-  geom_bar(stat = "identity", fill = "skyblue", color = "black") +
+  geom_bar(stat = "identity", fill = "slateblue", color = "black") +
   labs(title = "Cantidad de Tickets por Intervalo de Precio",
        x = "Intervalo de Precio",
        y = "Cantidad de Tickets") +
