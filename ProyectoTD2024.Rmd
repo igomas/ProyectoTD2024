@@ -542,3 +542,8 @@ data_fechas
 
 ```
 
+Funcion para mostrar un resumen de nuestro datframe
+```{r}
+glimpse(data1)
+```
+
