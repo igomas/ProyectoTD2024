@@ -595,6 +595,13 @@ data_clear_producto %>% filter(!is.na(Cantidad)) %>%
   
 
 ```
+Hemos seleccionado el CACAHUETE SIN SAL parea poder ver en que mes se ha comprado más producto y en que mes menos
+```{r}
+unique(data1$Producto)
+producto_seleccionado <- "CACAHUETE SIN SAL "
+```
+
+
 Figura 8
 
 6.  ¿Cómo ha variado el precio de los productos más vendidos en los últimos meses?
