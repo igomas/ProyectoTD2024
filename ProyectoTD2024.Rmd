@@ -73,6 +73,28 @@ Además, para llevar a cabo este proceso y realizar otras operaciones de manipul
 
 
 
+## Caracteristicas generales
+
+Podemos observar que usando la función glimpse de la librería dplyr proporciona una visión rápida y resumida de los datos en un dataframe, en este caso de nuestro data1, el cual contiene los datos que queremos analizar.
+
+Principalmente nuestro dataset tiene un total de 1213 observaciones y 12 variables. Tras un proceso de limpieza y preprocesamiento de los datos, el dataset data1 contiene datos los cuales nos interesan para hacer nuestro análisis posterior. Tras esta depuración de los datos, las variables que nos convienen están mostradas en la Tabla 1.
+
+
+## Análisis de missing data
+
+El análisis de datos faltantes se lleva a cabo principalmente utilizando la función complete.cases. Esta función se utiliza para eliminar las filas que contienen uno o más valores faltantes en el dataframe. Además se descartan las lineas vacias leídas en los tickets.
+
+Aquí está el proceso específico:
+1. Identificación de datos faltantes: Se realiza una exploración inicial de los datos para detectar valores ausentes en el dataframe.
+
+2. Eliminación de filas con datos faltantes: Se utiliza la función complete.cases para eliminar las filas que contienen valores faltantes en cualquier columna del dataframe. Esto garantiza que el dataframe final no tenga valores faltantes y esté listo para su análisis.
+
+3. Resultado final: Después de este proceso, el dataframe resultante no tendrá valores faltantes y estará listo para análisis posteriores sin la preocupación de la integridad de los datos.
+
+En resumen, el análisis de datos faltantes en el código se centra en garantizar que el dataframe esté completo y no contenga valores faltantes antes de proceder con cualquier análisis adicional. Además de garantizar la correcta separación de los datos en sus variables correspondientes  
+
+
+
 # Preguntas
 
 
