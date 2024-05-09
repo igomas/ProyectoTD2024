@@ -686,5 +686,4 @@ Funcion para mostrar un resumen de nuestro datframe
 ```{r}
 glimpse(data1)
 ```
-65
- 33
+3
