@@ -1,8 +1,11 @@
 ---
 title: "ProyectoTD2024 Grupo F"
-author: "Maria Castellanos, Pablo Pons, Irene Gómez, Jenny Carolina Matamoros, Andreu Herrero, Álvaro Cruz"
+author: Maria Castellanos, Pablo Pons, Irene Gómez, Jenny Carolina Matamoros, Andreu
+  Herrero, Álvaro Cruz
 date: "2024-03-26"
-output: html_document
+output:
+  word_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -108,7 +111,7 @@ for (archivo in archivos_texto) {
   datos[[length(datos) + 1]] <- data1_temporal
 }
 
-#uniremos todos los datas en uno solo
+#uniremos todos los datas en uno solo 
 data1 <- bind_rows(datos)
 #vamos a separar la columna Ciudad en dos , donde una se llamara codigo postal y otra ciudad
 data1<- separate(data1, Ciudad, into = c("codigo_postal", "ciudad"))
