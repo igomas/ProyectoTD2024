@@ -597,8 +597,13 @@ data_clear_producto %>% filter(!is.na(Cantidad)) %>%
 ```
 Hemos seleccionado el CACAHUETE SIN SAL parea poder ver en que mes se ha comprado más producto y en que mes menos
 ```{r}
+#seleccionamos la columna producto
 unique(data1$Producto)
+#decimos que queremos el producto cachuete sin sal
 producto_seleccionado <- "CACAHUETE SIN SAL "
+#utilizamos el filter y nos aseguramos que la cantidad no esté vacia
+data_clear_producto %>% filter(!is.na(Cantidad)) %>% 
+
 ```
 
 
