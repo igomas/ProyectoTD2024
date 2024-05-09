@@ -61,6 +61,18 @@ Nos enfocaremos en varios aspectos clave de las compras en Mercadona. Exploramos
 Además, analizaremos detenidamente las ubicaciones de las tiendas de Mercadona para determinar dónde se realizan más ventas, lo que proporcionará información valiosa sobre la demanda y las preferencias del cliente. Por último, calcularemos el precio medio de compra y la cantidad media de productos en cada compra, lo que nos permitirá comprender mejor los hábitos de compra de los clientes.
 
 
+## Carga de librerias
+
+Se comienza cargando todas las librerías necesarias para las diversas etapas del proyecto, lo que se logra de manera eficiente utilizando el paquete pacman en R.
+
+A continuación, se procede a cargar el conjunto de datos que se encuentra en formato .txt en la carpeta./data del repositorio del proyecto. Además, se incluye la carga de un archivo .ipynb que contiene una función útil para transformar tickets en formato pdf a txt. Esta función será esencial para automatizar la conversión del conjunto de datos, actualmente en estado bruto, a datos técnicamente correctos, donde cada variable tenga su tipo correspondiente.
+
+Una vez completada la fase de importación de datos, hemos obtenido un conjunto que incluye las variables relevantes para nuestro análisis. Este conjunto representa los tickets de compra del supermercado Mercadona. La información recopilada en estos tickets abarca aspectos clave como los productos adquiridos, el precio, la hora de compra y la sucursal de Mercadona correspondiente. 
+
+Además, para llevar a cabo este proceso y realizar otras operaciones de manipulación y limpieza de datos, hemos utilizado las siguientes librerías: readr, dplyr, tidyr y stringr. Estas herramientas proporcionan funciones y métodos que nos permiten leer, transformar y manipular eficientemente los datos, garantizando así un flujo de trabajo efectivo y organizado.
+
+
+
 # Preguntas
 
 
