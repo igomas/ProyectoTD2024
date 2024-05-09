@@ -54,9 +54,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Introduccion
 
-El conjunto de datos que vamos a utilizar para el análisis de nuestro proyecto pertenecen al supermercado Mercadona. En concreto, son tickets de los usuarios que realizan sus compras en dicho supermercado, que tiene como propósito informar de las compras de dichos usuarios.
+El conjunto de datos que utilizaremos para nuestro análisis pertenece al supermercado Mercadona. Estos datos consisten en tickets de compra de los usuarios que realizan sus compras en dicho supermercado. Nuestro objetivo principal es proporcionar información relevante sobre los patrones de compra de los clientes.
 
-En nuestro caso, hemos decidido hacer la exploración de las horas más concurridas, de la evolución del precio de los productos, del método de pago, del precio medio de la compra y de la media de la cantidad de los productos comprados.
+Nos enfocaremos en varios aspectos clave de las compras en Mercadona. Exploramos las horas más concurridas del día para comprender mejor los picos de actividad. Luego, nos fijamos en la evolución del precio de los productos a lo largo del tiempo, identificando cualquier tendencia que pueda influir en el comportamiento del consumidor y las estrategias de precios de la empresa.
+
+Además, analizaremos detenidamente las ubicaciones de las tiendas de Mercadona para determinar dónde se realizan más ventas, lo que proporcionará información valiosa sobre la demanda y las preferencias del cliente. Por último, calcularemos el precio medio de compra y la cantidad media de productos en cada compra, lo que nos permitirá comprender mejor los hábitos de compra de los clientes.
+
 
 # Preguntas
 
