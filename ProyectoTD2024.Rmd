@@ -4,10 +4,11 @@ author: Maria Castellanos, Pablo Pons, Irene Gómez, Jenny Carolina Matamoros, A
   Herrero, Álvaro Cruz
 date: "2024-03-26"
 output:
-  bookdown::pdf_document2:
-    toc: true
-    toc_depth: 3
+  bookdown::html_document2:
+    echo: true
     number_sections: true
+    theme: spacelab
+    toc: true
   html_document:
     echo: true
     number_sections: true
@@ -21,11 +22,10 @@ output:
     toc: true
     toc_depth: 3
     number_sections: true
-  bookdown::html_document2:
-    echo: true
-    number_sections: true
-    theme: spacelab
+  bookdown::pdf_document2:
     toc: true
+    toc_depth: 3
+    number_sections: true
 always_allow_html: true
 params:
   lang: ES
@@ -48,8 +48,27 @@ language:
     solution: 'Solución. '
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r setup, cache = F, echo = F, message = F, warning = F, tidy = F}
+
+
+# CONFIGURACIÓN GENERAL
+library(knitr)
+options(width = 100)
+
+# Opciones generales de los chucks. Se utilizarán salvo cambios en el chunk
+opts_chunk$set(echo=F, message = F, error = F, warning = F, comment = NA, fig.align = 'center', dpi = 200, tidy = F, cache.path = '.cache/', fig.path = './figura/')
+
+# Opciones generales de dígitos cuando se incluyen tablas
+#options(xtable.type = 'html')
+knit_hooks$set(inline = function(x) {
+  
+  if(is.numeric(x)) {
+    round(x, getOption('digits'))
+  } else {
+    paste(as.character(x), collapse = ', ')
+  }
+})
+#knit_hooks$set(plot = knitr:::hook_plot_html)
 ```
 
 # Introduccion
