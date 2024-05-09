@@ -80,7 +80,7 @@ Nos enfocaremos en varios aspectos clave de las compras en Mercadona. Exploramos
 Además, analizaremos detenidamente las ubicaciones de las tiendas de Mercadona para determinar dónde se realizan más ventas, lo que proporcionará información valiosa sobre la demanda y las preferencias del cliente. Por último, calcularemos el precio medio de compra y la cantidad media de productos en cada compra, lo que nos permitirá comprender mejor los hábitos de compra de los clientes.
 
 
-## Carga de librerias
+# Instalación automática de paquetes
 
 Se comienza cargando todas las librerías necesarias para las diversas etapas del proyecto, lo que se logra de manera eficiente utilizando el paquete pacman en R.
 
@@ -90,6 +90,15 @@ Una vez completada la fase de importación de datos, hemos obtenido un conjunto 
 
 Además, para llevar a cabo este proceso y realizar otras operaciones de manipulación y limpieza de datos, hemos utilizado las siguientes librerías: readr, dplyr, tidyr y stringr. Estas herramientas proporcionan funciones y métodos que nos permiten leer, transformar y manipular eficientemente los datos, garantizando así un flujo de trabajo efectivo y organizado.
 
+```{r, warning=FALSE}
+#descargaremos las librerias que necesitamos
+#supondremos que el usuario tiene ya instalado pacman
+library(pacman)
+p_load(readr, dplyr,tidyr,stringr)
+#library(readr)
+#library(dplyr)
+#library(tidyr)
+```
 
 
 ## Caracteristicas generales
