@@ -435,6 +435,7 @@ precios2_kg <- gsub("\u0080", "", precios2_kg)
 #Como se puede observar la fruta correspondiente al precio por kilo se encuentra en la fila anterior, por lo que haremos una variable con todos esos indices menos uno (anterior)
 indice_anterior_kg <- indices2_kg - 1
 
+
 #guardaremos todos los datos de las frutas en una variable 
 producto_2 <- data1$Producto[indice_anterior_kg]
 #procederemos a unir las variables de producto_2 y precio2_kg
