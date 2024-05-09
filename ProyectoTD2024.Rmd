@@ -188,16 +188,106 @@ for (archivo in archivos_texto) {
 
 #uniremos todos los datas en uno solo 
 data1 <- bind_rows(datos)
-data1
+head(data1)
+
 ```
-## Caracteristicas generales
+
+## Ajustes variables
+
+Visualizando el data, vemos como tenemos dos variables en una , por lo que pasaremos a separarlas, la columna Ciudad c("codigo postal"," ciudad"),la columna Fecha la cual hemos separado en fecha y hora.
+Como nos podemos fijar en el data frame la variable de cantidad, no esta ajustada de una forma que nos facilite su importacion en el caso de un futuro analisis, por lo que deberemos ajustarla
+#nos fijamos en que las lineas siguen un formato, estan las cantidades del producto y el producto unidas, por lo que usaremos la funcion gsub para que añada una "/", asignaremos la nueva forma a la variable del dataframe y una vez ya hecho podemos usar la funcion separate para poder separar la columna cantidad en c("Cantidad", "Producto"). 
+Por ultimo, haremos un cambio en los valores que sean numeros, ya que en R no se usan comas sino que se usan puntos.
+Todos estos cambios los iremos guardando en el data
+
+```{r}
+#vamos a separar la columna Ciudad en dos , donde una se llamara codigo postal y otra ciudad
+data1<- separate(data1, Ciudad, into = c("codigo_postal", "ciudad"))
+#aqui hemos hecho lo mismo pero con la columna Fecha la cual hemos separado en fecha y hora
+data1 <- separate(data1, Fecha, into = c("fecha", "hora"), sep = "(\\s+|\\s+OP:\\s+)")
+df <- as.data.frame(data1)
+
+#Como nos podemos fijar en el data frame la variable de cantidad, no esta ajustada de una forma que nos facilite su importacion en el caso de un futuro analisis, por lo que deberemos ajustarla
+#nos fijamos en que las lineas siguen un formato, estan las cantidades del producto y el producto unidas, por lo que usaremos la funcion gsub para que añada una "/" al principio para que cuando lea y vea que hay un numero seguido de una letra la añada
+datos_cantidades <- gsub("(\\d+)([A-Z])", "\\1/\\2", data1$Cantidad)
+#asignaremos la nueva forma a la variable del dataframe
+data1$Cantidad <- datos_cantidades
+#ahora nos fijamos en que no todas las lineas tiene un numero y una letra justo detras, sino que tiene un numero seguido de un espacio en blanco, haremos lo mismo 
+datos_cantidades2 <- gsub("^([0-9]+) ", "\\1/ ", data1$Cantidad)
+#asignaremos la nueva forma a la variable del dataframe
+data1$Cantidad <- datos_cantidades2
+#ahora podemos usar la funcion separate para poder separar la columna cantidad en dos, la cual una es cantidad y la otra producto, lo cual nos resultara mas facil ya que todos tienen un patron con /
+data1 <- separate(data1, Cantidad, into = c("Cantidad", "Producto"), sep = "/", extra = "merge")
+
+#ahora cambiaremos las comas por los puntos
+producto1 <- gsub(",", ".", data1$Producto)
+#asignaremos el nuevo formato 
+data1$Producto <- producto1
+
+#ahora nos encargaremos de separar la variable producto en producto y precio, ya que como se puede observar ambos estan unidos
+producto_editado <- gsub(" ([0-9]+\\.[0-9]+)$", " /\\1", data1$Producto, perl = TRUE)
+#lo asignaremos al dataframe
+data1$Producto <- producto_editado
+```
+
+
+```{r}
+#usaremos la funcion de str_detect para hallar los indices de las filas donde se encuentra "kg" lo cual lo tomaremos como referencia para encontrar la fila que equivale al precio por kilo de las frutas que se encuentran en la columna "Cantidad"
+indices2_kg <-  which(str_detect(data1$Cantidad, "kg"))
+#guardaremos en una variable los valores que se encuentran en cada indice de la columna Cantidad
+precios2_kg <- data1$Cantidad[indices2_kg]
+#eliminar el final
+precios2_kg <- gsub("\u0080", "", precios2_kg)
+#Como se puede observar la fruta correspondiente al precio por kilo se encuentra en la fila anterior, por lo que haremos una variable con todos esos indices menos uno (anterior)
+indice_anterior_kg <- indices2_kg - 1
+
+#guardaremos todos los datos de las frutas en una variable 
+producto_2 <- data1$Producto[indice_anterior_kg]
+#procederemos a unir las variables de producto_2 y precio2_kg
+producto_completo <- paste(producto_2, precios2_kg, sep = ", ")
+#asignaremos a las filas de cada producto segun el indice en que localizamos donde estaban los nuevos productos completos
+data1$Producto[indice_anterior_kg] <- producto_completo
+
+#y como hemos conseguido que sigan un patron lo aprovecharemos para separarlo siguiendo dicha patron
+data1 <- separate(data1, Producto, into = c("Producto", "Precio_Final"), sep = "/(?=[^/]+$)", extra = "merge")
+
+#ajuste producto pollo y conejo
+palabra1 <- "TROCEADO"
+palabra2 <- "PARTIDO"
+medio_troceado <- which(str_detect(data1$Producto, paste(palabra1, palabra2, sep = "|") ))
+
+cantidad_medio_troceado <-data1$Cantidad[medio_troceado] 
+
+producto_medio <- data1$Producto[medio_troceado]
+
+filtrados <- ifelse(nchar(cantidad_medio_troceado) > 1, substr(cantidad_medio_troceado, 1, nchar(cantidad_medio_troceado) - 1), cantidad_medio_troceado)
+ 
+ultimos <- ifelse(nchar(cantidad_medio_troceado) > 1, substr(cantidad_medio_troceado, nchar(cantidad_medio_troceado), nchar(cantidad_medio_troceado)), NA)
+
+data1$Cantidad[medio_troceado] <- filtrados
+na_indices <- which(!is.na(ultimos))
+data1$Producto[medio_troceado[na_indices]] <- paste(ultimos[na_indices],data1$Producto[medio_troceado[na_indices]], sep = "")
+
+#Visualizando el data frame, se han encontrado algunos errores, por ejemplo en las variables de Cantidad y Producto nos hemos encontrado con alguna fila con los datos de parking de entrada y salida, como en un principio se llego a la idea de no usarlo, mediante la funcion subset eliminaremos del dataframe tanto de la variable Producto como Cantidad todas aquellas filas donde aparezcan las palabras ENTRADA, SALIDA Y PARKING
+data1 <- subset(data1, !grepl("ENTRADA|SALIDA|PARKING", data1$Cantidad, ignore.case = TRUE))
+data1 <- subset(data1, !grepl("ENTRADA|SALIDA|PARKING", data1$Producto, ignore.case = TRUE))
+
+# Bucle para reemplazar los NA con el valor de la siguiente fila
+for (i in 1:(nrow(data1) - 1)) {
+  if (is.na(data1$Precio_Final[i])) {
+    data1$Precio_Final[i] <- data1$Precio_Final[i + 1]
+  }
+}
+```
+
+# Caracteristicas generales
 
 Podemos observar que usando la función glimpse de la librería dplyr proporciona una visión rápida y resumida de los datos en un dataframe, en este caso de nuestro data1, el cual contiene los datos que queremos analizar.
 
 Principalmente nuestro dataset tiene un total de 1213 observaciones y 12 variables. Tras un proceso de limpieza y preprocesamiento de los datos, el dataset data1 contiene datos los cuales nos interesan para hacer nuestro análisis posterior. Tras esta depuración de los datos, las variables que nos convienen están mostradas en la Tabla 1.
 
 
-## Análisis de missing data
+# Análisis de missing data
 
 El análisis de datos faltantes se lleva a cabo principalmente utilizando la función complete.cases. Esta función se utiliza para eliminar las filas que contienen uno o más valores faltantes en el dataframe. Además se descartan las lineas vacias leídas en los tickets.
 
