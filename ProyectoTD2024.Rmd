@@ -94,7 +94,7 @@ Además, para llevar a cabo este proceso y realizar otras operaciones de manipul
 #descargaremos las librerias que necesitamos
 #vamos a dar por hecho que el usuario ya tiene instalado el paquete "pacman"
 library(pacman)
-p_load(readr, dplyr,tidyr,stringr)
+p_load(readr, dplyr,tidyr,stringr, lubridate)
 
 ```
 
@@ -323,7 +323,34 @@ Podemos observar que usando la función glimpse de la librería dplyr proporcion
 
 Principalmente nuestro dataset tiene un total de 1213 observaciones y 12 variables. Tras un proceso de limpieza y preprocesamiento de los datos, el dataset data1 contiene datos los cuales nos interesan para hacer nuestro análisis posterior. Tras esta depuración de los datos, las variables que nos convienen están mostradas en la Tabla 1.
 
+## Variables tipo numericas
 
+```{r}
+
+#Funcion para seleccionar las variables tipo numericas
+data_numericas<- data1 %>% select_if(is.numeric)
+df_numericas_unicas <- data_numericas %>% distinct()
+head(df_numericas_unicas)
+```
+
+## Variables tipo categoricas
+
+
+```{r}
+#Funcion para seleccionar las variables tipo categoricas
+data_categoricas<- data1 %>% select_if(is.character)
+head(data_categoricas)
+```
+## Variables tipo fecha
+
+
+
+```{r}
+data_fechas<- data1 %>% select_if(is.Date)
+head(data_fechas)
+
+#Funcion para seleccionar las variables tipo fecha
+```
 # Análisis de missing data
 
 El análisis de datos faltantes se lleva a cabo principalmente utilizando la función complete.cases. Esta función se utiliza para eliminar las filas que contienen uno o más valores faltantes en el dataframe. Además se descartan las lineas vacias leídas en los tickets.
@@ -726,7 +753,7 @@ ggplot(conteo_productos[1:10,], aes(x = reorder(Producto, -Cantidad_Total), y = 
 ```
 Figura 5
 
-**3.  En que Mercadona se realizan más ventas?**
+- **3.  En que Mercadona se realizan más ventas?**
 En la Figura 6, estamos registrando el número de compras que se hace en cada uno de los Mercadona que tenemos registrado, para ver en cual se ha hecho un mayor número de compras
 
 ```{r}
@@ -811,12 +838,12 @@ data_clear_producto %>% filter(!is.na(Cantidad)) %>%
   #por último con filter nos quedamos solo con los productos cuya cantidad sea igual que a la maxima comprada de este producto, y así será la cantidad máxima comprada de este producto en cada mes.
   filter(maximo_cant == suma_cantidad)
   
-
+head(data_clear_producto)
 ```
 Hemos seleccionado el CACAHUETE SIN SAL parea poder ver en que mes se ha comprado más producto y en que mes menos
 ```{r}
 #seleccionamos la columna producto
-unique(data1$Producto)
+#unique(data1$Producto)
 #decimos que queremos el producto cachuete sin sal
 producto_seleccionado <- "CACAHUETE SIN SAL "
 #utilizamos el filter y nos aseguramos que la cantidad no esté vacia
@@ -829,6 +856,7 @@ data_clear_producto %>% filter(!is.na(Cantidad)) %>%
   summarise(suma_cantidad = sum(Cantidad)) %>% 
   #ordenamos en descendente
   arrange(desc(suma_cantidad))
+
 ```
 
 
@@ -868,35 +896,6 @@ ggplot(ventas_productos_mas_vendidos, aes(x = fecha, y = Precio_Final, color = P
        y = "Precio Promedio") +
   theme_minimal()+
   ylim(1, NA)
-
-```
-
-
-Funcion para seleccionar las variables tipo numericas
-
-```{r}
-
-
-data_numericas<- data1 %>% select_if(is.numeric)
-
-
-df_numericas_unicas <- data_numericas %>% distinct()
-df_numericas_unicas
-```
-
-Funcion para seleccionar las variables tipo categoricas
-```{r}
-data_categoricas<- data1 %>% select_if(is.character)
-data_categoricas
-```
-
-Funcion para seleccionar las variables tipo fecha
-
-
-```{r}
-data_fechas<- data1 %>% select_if(is.Date)
-data_fechas
-
 
 ```
 
