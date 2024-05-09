@@ -453,6 +453,7 @@ medio_troceado <- which(str_detect(data1$Producto, paste(palabra1, palabra2, sep
 
 cantidad_medio_troceado <-data1$Cantidad[medio_troceado] 
 
+
 producto_medio <- data1$Producto[medio_troceado]
 
 filtrados <- ifelse(nchar(cantidad_medio_troceado) > 1, substr(cantidad_medio_troceado, 1, nchar(cantidad_medio_troceado) - 1), cantidad_medio_troceado)
