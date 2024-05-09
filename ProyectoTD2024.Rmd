@@ -25,7 +25,7 @@ En nuestro caso, hemos decidido hacer la exploración de las horas más concurri
 5.  En que mes se ha comprado más "x producto"?
 6.  ¿Cómo ha variado el precio promedio de los productos más vendidos en los últimos meses?
 
-```{r warning=FALSE, Warning=}
+```{r warning=FALSE}
 #Haremos la importacion de los datos
 #descargaremos las librerias que necesitamos
 #install.packages("pacman")
