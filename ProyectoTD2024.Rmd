@@ -609,6 +609,8 @@ data_clear_producto %>% filter(!is.na(Cantidad)) %>%
   #agrupamos el producto con el mes de la compra y sumamos la cantidad de este produco para ver cual será su cantidad maxima comprafa
   group_by(Producto, mes_compra) %>% 
   summarise(suma_cantidad = sum(Cantidad)) %>% 
+  #ordenamos en descendente
+  arrange(desc(suma_cantidad))
 ```
 
 
