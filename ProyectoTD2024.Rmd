@@ -71,7 +71,7 @@ knit_hooks$set(inline = function(x) {
 #knit_hooks$set(plot = knitr:::hook_plot_html)
 ```
 
-# Introduccion
+# **Introduccion**
 
 El conjunto de datos que utilizaremos para nuestro análisis pertenece al supermercado Mercadona. Estos datos consisten en tickets de compra de los usuarios que realizan sus compras en dicho supermercado. Nuestro objetivo principal es proporcionar información relevante sobre los patrones de compra de los clientes.
 
@@ -80,7 +80,7 @@ Nos enfocaremos en varios aspectos clave de las compras en Mercadona. Exploramos
 Además, analizaremos detenidamente las ubicaciones de las tiendas de Mercadona para determinar dónde se realizan más ventas, lo que proporcionará información valiosa sobre la demanda y las preferencias del cliente. Por último, calcularemos el precio medio de compra y la cantidad media de productos en cada compra, lo que nos permitirá comprender mejor los hábitos de compra de los clientes.
 
 
-# Instalación automática de paquetes
+## Instalación automática de paquetes
 
 Se comienza cargando todas las librerías necesarias para las diversas etapas del proyecto, lo que se logra de manera eficiente utilizando el paquete pacman en R.
 
@@ -90,17 +90,106 @@ Una vez completada la fase de importación de datos, hemos obtenido un conjunto 
 
 Además, para llevar a cabo este proceso y realizar otras operaciones de manipulación y limpieza de datos, hemos utilizado las siguientes librerías: readr, dplyr, tidyr y stringr. Estas herramientas proporcionan funciones y métodos que nos permiten leer, transformar y manipular eficientemente los datos, garantizando así un flujo de trabajo efectivo y organizado.
 
-```{r, warning=FALSE}
+```{r,warning = FALSE}
 #descargaremos las librerias que necesitamos
-#supondremos que el usuario tiene ya instalado pacman
+#vamos a dar por hecho que el usuario ya tiene instalado el paquete "pacman"
 library(pacman)
 p_load(readr, dplyr,tidyr,stringr)
-#library(readr)
-#library(dplyr)
-#library(tidyr)
+
 ```
 
+# **Importacion de datos**
 
+## Recogida de datos
+
+Los datos recogidos han sido tickets de Mercadona, los cuales estan en formato PDF. Necesitaremos recoger una cantidad considerable de tickets para poder realizar un analisis lo mas completo posible, los cuales se almacenaran en una carpeta "data".
+
+## Conversion de datos 
+
+El profesor nos ha proporcionado un fichero de Jupiter Lab, el cual sera usado para la conversion de formato pdf a txt
+
+## Lectura e importacion a dataframe de los datos 
+
+Vamos a guardar en una variable la ruta donde se encuentra la carpeta con todos los ficheros que utilizaremos.Usaremos el codigo list.files para obtener una lista de archivos dentro de la carpeta de la cual solo vamos a seleccionar los archivos que sean ".txt". Se creará una lista donde almacenaremos los datos de cada archivo.Para poder leer el contenido de los tickets, usaremos la funcion "read_lines" para leer linea por linea, pondremos el encoding correspondiente. En nuestro caso los datos que nos interesan del ticket son los que se encuentran hasta la linea donde nos indica el precio total de la compra realizada, por lo que pondremos que la lectura de los archivos llegue la palabra "TOTAl" ,y si no se encuentra la palabra "TOTAL" pasaremos al siguiente archivo. Como en todos los archivos las primeras lineas contienen la misma informacion,extraemos la      información y la iremos organizando en variables, pero en algunos casos necesitaremos hacer algun ajuste en los valores de cada variable, por ejemplo:la forma en la que guarda los datos en la columna Telefono, Factura y hemos indicado que la variable cantidad en cada ticket ocupa un tamaño diferente y asi lo tenga en cuenta para las otras variables que  
+
+```{r}
+#Primero vamos a guardar en una variable la ruta donde se encuentra la carpeta con todos los ficheros que utilizaremos
+carpeta_ruta <- ".\\data"
+
+#Ahora declararemos una variable donde usaremos el codigo list.files para obtener una lista de archivos dentro de la carpeta de la cual solo vamos a seleccionar los archivos que sean .txt
+archivos_texto <- list.files(path = carpeta_ruta , pattern = "\\.txt$", full.names = TRUE)
+
+#crearemos una lista donde almacenaremos los datos de cada archivo
+datos <- list()
+
+#iniciaremos un bucle, el cual iterara con todos los archivos en la lista de archivos
+for (archivo in archivos_texto) {
+  # Leeremos las líneas del archivo
+  lineas <- read_lines(archivo, locale = locale(encoding = "latin1")) #ponemos el encoding correspondiente
+  
+  #Los datos que nos interesan del ticket son los que se encuentran hasta la linea donde nos indica el precio total de la compra realizada, 
+  #por lo que pondremos que busque la palabra    
+  #TOTAl, en la cual nos devolvera el numero donde se encuentra en cada archivo
+  pos_total <- grep("TOTAL", lineas)
+  
+  #si no se encuentra la palabra "TOTAL" pasaremos al siguiente archivo
+  if (length(pos_total) == 0) next
+  
+  #ahora haremos que cada archivo solo  vaya hasta la posicion donde se encuentra TOTAL
+  lineas <- lineas[1:(pos_total)]
+  
+  #eliminaremos las líneas en blanco o vacías
+  lineas <- lineas[lineas != ""]
+  
+  #como en todos los archivos las primeras lineas contienen la misma informacion,extraemos la      información
+  empresa <- lineas[1]
+  direccion <- lineas[2]
+  ciudad <- lineas[3]
+  
+  #ajustaremos la forma en la que guarda los datos en la columna Telefono
+  telefono_linea <- lineas[grep("TELÉFONO:", lineas)]
+  telefono <- substring(telefono_linea, regexpr(":", telefono_linea) + 1)
+  
+  fecha <- lineas[5]
+  
+  #ajustaremos la forma en la que guarda los datos en la columna Factura
+  factura_linea <- lineas[grep("FACTURA SIMPLIFICADA:", lineas)]
+  factura <- substring(factura_linea, regexpr(":", factura_linea) + 2)
+ 
+  descripcion <- lineas[7]
+  
+  #aqui indicamos que la variable cantidad va desde la linea 8 hasta la penultima de las 
+  #lineas que hemos leido de cada archivo, ya que no todos los tickets contienen la misma 
+  #cantidad de productos comprados
+  rango <- 8:(length(lineas)-1)
+  cantidad <- lineas[rango]
+  
+  
+  #aqui indicamos que el total de la compra se encuentra en la ultima linea de cada archivo
+  rango_total <- length(lineas)
+  total <- lineas[rango_total]
+  
+  #almacenaremos la información en un data temporal
+  data1_temporal <- data.frame(Empresa = empresa,
+                            Direccion = direccion,
+                            Ciudad = ciudad,
+                            Telefono = telefono,
+                            Fecha = fecha,
+                            Factura = factura,
+                            Cantidad = cantidad,
+                            Total = total
+                            )
+
+
+  
+  #añadiremos el data temporal a la lista de datos
+  datos[[length(datos) + 1]] <- data1_temporal
+}
+
+#uniremos todos los datas en uno solo 
+data1 <- bind_rows(datos)
+data1
+```
 ## Caracteristicas generales
 
 Podemos observar que usando la función glimpse de la librería dplyr proporciona una visión rápida y resumida de los datos en un dataframe, en este caso de nuestro data1, el cual contiene los datos que queremos analizar.
