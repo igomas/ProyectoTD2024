@@ -4,8 +4,48 @@ author: Maria Castellanos, Pablo Pons, Irene Gómez, Jenny Carolina Matamoros, A
   Herrero, Álvaro Cruz
 date: "2024-03-26"
 output:
-  word_document: default
-  html_document: default
+  bookdown::pdf_document2:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+  html_document:
+    echo: true
+    number_sections: true
+    theme: lumen
+    toc: true
+  html_notebook:
+    echo: true
+    number_sections: true
+    toc: true
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+  bookdown::html_document2:
+    echo: true
+    number_sections: true
+    theme: spacelab
+    toc: true
+always_allow_html: true
+params:
+  lang: ES
+lang: "`r switch(params$lang, ES = 'es-ES', EN = 'en-US')`"
+subtitle: "Tratamiento de Datos. Grado en Ciencia de Datos- UV"
+language:
+  label:
+    fig: 'Figura '
+    tab: 'Tabla '
+    eq: 'Ecuación '
+    thm: 'Teorema '
+    lem: 'Lema '
+    def: 'Definición '
+    cor: 'Corolario '
+    prp: 'Proposición '
+    exm: 'Ejemplo '
+    exr: 'Ejercicio '
+    proof: 'Demostración. '
+    remark: 'Nota: '
+    solution: 'Solución. '
 ---
 
 ```{r setup, include=FALSE}
