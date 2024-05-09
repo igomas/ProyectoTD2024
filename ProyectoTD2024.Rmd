@@ -228,8 +228,10 @@ data1$Producto <- producto1
 producto_editado <- gsub(" ([0-9]+\\.[0-9]+)$", " /\\1", data1$Producto, perl = TRUE)
 #lo asignaremos al dataframe
 data1$Producto <- producto_editado
+head(data1)
 ```
 
+ Si seguimos visualizando el data podemos observar como tenemos dos variables que nos dan problemas , si observamos podemos ver como los datos los cuales nos podran causar problemas para un futuro analisis, tienen en comun "kg" , para detectar todos aquellos valores y asi despues modificarlos usaremos la funcion "str_detect", al tener una vez almacenados todos aquellos valores en una variable , los uniremos juntos a sus valores correspondientes en la variable Producto.
 
 ```{r}
 #usaremos la funcion de str_detect para hallar los indices de las filas donde se encuentra "kg" lo cual lo tomaremos como referencia para encontrar la fila que equivale al precio por kilo de las frutas que se encuentran en la columna "Cantidad"
@@ -250,7 +252,10 @@ data1$Producto[indice_anterior_kg] <- producto_completo
 
 #y como hemos conseguido que sigan un patron lo aprovecharemos para separarlo siguiendo dicha patron
 data1 <- separate(data1, Producto, into = c("Producto", "Precio_Final"), sep = "/(?=[^/]+$)", extra = "merge")
+```
 
+Si nos fijamos aun hay algunas variables que nos pueden causar problema, debido a que se realizo una mala separacion en la linea y en el momento de pasarlo al data, hay datos que no son coherente o no tienen sentido, por lo que los ajustaremos
+```{r}
 #ajuste producto pollo y conejo
 palabra1 <- "TROCEADO"
 palabra2 <- "PARTIDO"
@@ -267,17 +272,48 @@ ultimos <- ifelse(nchar(cantidad_medio_troceado) > 1, substr(cantidad_medio_troc
 data1$Cantidad[medio_troceado] <- filtrados
 na_indices <- which(!is.na(ultimos))
 data1$Producto[medio_troceado[na_indices]] <- paste(ultimos[na_indices],data1$Producto[medio_troceado[na_indices]], sep = "")
+```
 
+ Se puede observar como hay algun valor el cual ha sido mal leido y ha sido añadido, por lo que nosotros procederemos a eliminar esos valores.
+```{r}
 #Visualizando el data frame, se han encontrado algunos errores, por ejemplo en las variables de Cantidad y Producto nos hemos encontrado con alguna fila con los datos de parking de entrada y salida, como en un principio se llego a la idea de no usarlo, mediante la funcion subset eliminaremos del dataframe tanto de la variable Producto como Cantidad todas aquellas filas donde aparezcan las palabras ENTRADA, SALIDA Y PARKING
 data1 <- subset(data1, !grepl("ENTRADA|SALIDA|PARKING", data1$Cantidad, ignore.case = TRUE))
 data1 <- subset(data1, !grepl("ENTRADA|SALIDA|PARKING", data1$Producto, ignore.case = TRUE))
+```
 
+Podemos observar como en la variable Precio_Final tenemos valores NA, pero si nos fijamos ,esos valores se encuentran en la linea de abajo debido al ajuste que hicimos con los valores del data que contenian "kg". Asi que reemplazaremos los valores NA por los valores que hay en la fila siguiente
+
+```{r}
 # Bucle para reemplazar los NA con el valor de la siguiente fila
 for (i in 1:(nrow(data1) - 1)) {
   if (is.na(data1$Precio_Final[i])) {
     data1$Precio_Final[i] <- data1$Precio_Final[i + 1]
   }
 }
+
+```
+
+## Asignacion clase de cada variable
+
+Observando las variables nos dimos cuenta de que no estan con la clase correspondiente
+
+```{r}
+
+#Asignaremos la clase correspondiente a cada variable
+data1$Precio_Final <- as.numeric(data1$Precio_Final)
+data1$codigo_postal<- as.numeric(data1$codigo_postal)
+data1$Telefono <- as.numeric(data1$Telefono)
+data1$Cantidad <- as.numeric(data1$Cantidad)
+data1$fecha <- as.Date(data1$fecha, format = "%d/%m/%Y")
+data1 <- data1[complete.cases(data1$Cantidad), ]
+
+#ahora arreglaremos los valores de la columna "Total" y lo convertiremos al tipo de variable que corresponde
+datos_total <- data1$Total
+datos_total<- gsub("[^0-9,]", "", datos_total)
+data1$Total <-datos_total
+#ahora cambiaremos las comas por los puntos
+data1$Total <- gsub(",", ".", data1$Total)
+data1$Total<- as.numeric(data1$Total)
 
 ```
 
