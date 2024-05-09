@@ -278,6 +278,7 @@ for (i in 1:(nrow(data1) - 1)) {
     data1$Precio_Final[i] <- data1$Precio_Final[i + 1]
   }
 }
+
 ```
 
 # Caracteristicas generales
