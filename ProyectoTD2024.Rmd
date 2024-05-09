@@ -595,6 +595,25 @@ data_clear_producto %>% filter(!is.na(Cantidad)) %>%
   
 
 ```
+Hemos seleccionado el CACAHUETE SIN SAL parea poder ver en que mes se ha comprado más producto y en que mes menos
+```{r}
+#seleccionamos la columna producto
+unique(data1$Producto)
+#decimos que queremos el producto cachuete sin sal
+producto_seleccionado <- "CACAHUETE SIN SAL "
+#utilizamos el filter y nos aseguramos que la cantidad no esté vacia
+data_clear_producto %>% filter(!is.na(Cantidad)) %>% 
+  #escogemos el mes de la compra del producto
+  mutate(mes_compra = month(fecha)) %>% 
+  filter(Producto == producto_seleccionado) %>% 
+  #agrupamos el producto con el mes de la compra y sumamos la cantidad de este produco para ver cual será su cantidad maxima comprafa
+  group_by(Producto, mes_compra) %>% 
+  summarise(suma_cantidad = sum(Cantidad)) %>% 
+  #ordenamos en descendente
+  arrange(desc(suma_cantidad))
+```
+
+
 Figura 8
 
 6.  ¿Cómo ha variado el precio de los productos más vendidos en los últimos meses?
