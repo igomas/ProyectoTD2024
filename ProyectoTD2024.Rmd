@@ -603,6 +603,9 @@ unique(data1$Producto)
 producto_seleccionado <- "CACAHUETE SIN SAL "
 #utilizamos el filter y nos aseguramos que la cantidad no esté vacia
 data_clear_producto %>% filter(!is.na(Cantidad)) %>% 
+  #escogemos el mes de la compra del producto
+  mutate(mes_compra = month(fecha)) %>% 
+  filter(Producto == producto_seleccionado) %>% 
 
 ```
 
