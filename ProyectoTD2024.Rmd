@@ -686,9 +686,7 @@ convertir_texto_medio <- function(texto) {
 # Aplicar la función al vector
 producto_medio_modificado <- sapply(producto_medio, convertir_texto_medio)
 data1$Producto[medio_troceado]<- producto_medio_modificado
-```
 
-```{r}
 cantidades_texto <- as.character(data1$Cantidad)
 
 indice_toallitas <- which(str_detect(data1$Producto, "TOALLITAS"))
