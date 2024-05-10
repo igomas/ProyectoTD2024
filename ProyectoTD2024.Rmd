@@ -96,6 +96,7 @@ Además, para llevar a cabo este proceso y realizar otras operaciones de manipul
 library(pacman)
 p_load(readr, dplyr,tidyr,stringr, lubridate)
 
+
 ```
 
 # **Importacion de datos**
