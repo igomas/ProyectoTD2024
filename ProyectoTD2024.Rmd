@@ -317,7 +317,7 @@ data1$Total<- as.numeric(data1$Total)
 
 ```
 
-# Caracteristicas generales
+# **Caracteristicas generales**
 
 Podemos observar que usando la función glimpse de la librería dplyr proporciona una visión rápida y resumida de los datos en un dataframe, en este caso de nuestro data1, el cual contiene los datos que queremos analizar.
 
@@ -351,7 +351,7 @@ head(data_fechas)
 
 #Funcion para seleccionar las variables tipo fecha
 ```
-# Análisis de missing data
+# **Análisis de missing data**
 
 El análisis de datos faltantes se lleva a cabo principalmente utilizando la función complete.cases. Esta función se utiliza para eliminar las filas que contienen uno o más valores faltantes en el dataframe. Además se descartan las lineas vacias leídas en los tickets.
 
@@ -366,7 +366,7 @@ En resumen, el análisis de datos faltantes en el código se centra en garantiza
 
 
 
-# Preguntas
+## **Preguntas**
 
 
 1.  A qué hora se suele ir más a comprar?
@@ -753,7 +753,7 @@ ggplot(conteo_productos[1:10,], aes(x = reorder(Producto, -Cantidad_Total), y = 
 ```
 Figura 5
 
-- **3.  En que Mercadona se realizan más ventas?**
+ **3.  En que Mercadona se realizan más ventas?**
 En la Figura 6, estamos registrando el número de compras que se hace en cada uno de los Mercadona que tenemos registrado, para ver en cual se ha hecho un mayor número de compras
 
 ```{r}
