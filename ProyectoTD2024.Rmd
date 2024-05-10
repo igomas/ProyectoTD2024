@@ -367,7 +367,7 @@ En resumen, el análisis de datos faltantes en el código se centra en garantiza
 
 
 
-## **Preguntas**
+# **Preguntas**
 
 
 1.  A qué hora se suele ir más a comprar?
