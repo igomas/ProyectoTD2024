@@ -4,10 +4,11 @@ author: Maria Castellanos, Pablo Pons, Irene Gómez, Jenny Carolina Matamoros, A
   Herrero, Álvaro Cruz
 date: "2024-03-26"
 output:
-  bookdown::pdf_document2:
-    toc: true
-    toc_depth: 3
+  bookdown::html_document2:
+    echo: true
     number_sections: true
+    theme: spacelab
+    toc: true
   html_document:
     echo: true
     number_sections: true
@@ -21,11 +22,10 @@ output:
     toc: true
     toc_depth: 3
     number_sections: true
-  bookdown::html_document2:
-    echo: true
-    number_sections: true
-    theme: spacelab
+  bookdown::pdf_document2:
     toc: true
+    toc_depth: 3
+    number_sections: true
 always_allow_html: true
 params:
   lang: ES
@@ -474,6 +474,10 @@ Principalmente nuestro dataset tiene un total de 1213 observaciones y 12 variabl
 
 ## Variables tipo numericas
 
+A continuación, mostraremos aquellas variables las cuales son de tipo numérico, las cuales usaremos a posteriori para responder las preguntas planteadas.
+Como podemos observar , tenemos de variables tipo numérico el Código Postal, Teléfono, Cantidad, Precio Final y Total. Explorando en cada una de las variables podemos observar como en la variable “Cantidad” no obtendremos números demasiado grandes
+
+
 ```{r}
 
 #Funcion para seleccionar las variables tipo numericas
@@ -484,6 +488,7 @@ head(df_numericas_unicas)
 
 ## Variables tipo categoricas
 
+Continuamos con las variables de tipo categórico, en nuestro caso son “Empresa”, “Direccion”, “Ciudad”, “Hora”, “Factura”, “Producto”.
 
 ```{r}
 #Funcion para seleccionar las variables tipo categoricas
@@ -491,6 +496,8 @@ data_categoricas<- data1 %>% select_if(is.character)
 head(data_categoricas)
 ```
 ## Variables tipo fecha
+
+En este caso como podemos observar nuestra única variable tipo fecha es la fecha de compra de nuestros tickets.
 
 
 
@@ -974,10 +981,10 @@ print(paste("El precio medio de los tickets es",media_valor))
 ```
 Figura 7
 
-**5.  En que mes se ha comprado más "x producto"?**
+**5.  En que mes se ha comprado más el producto "CACAHUETE SIN SAL" ?**
 
 Haremos la estadística de cada producto cual ha sido el mes en el que mas se ha comprado dicho producto.
-```{r}
+```{r, echo = FALSE}
 library(tidyverse)
 library(lubridate)
 #aqui me aparecen todos los productos
@@ -997,7 +1004,6 @@ data_clear_producto %>% filter(!is.na(Cantidad)) %>%
   #por último con filter nos quedamos solo con los productos cuya cantidad sea igual que a la maxima comprada de este producto, y así será la cantidad máxima comprada de este producto en cada mes.
   filter(maximo_cant == suma_cantidad)
   
-head(data_clear_producto)
 ```
 Hemos seleccionado el CACAHUETE SIN SAL parea poder ver en que mes se ha comprado más producto y en que mes menos
 ```{r}
