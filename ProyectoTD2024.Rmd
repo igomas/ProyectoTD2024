@@ -1179,10 +1179,10 @@ barplot(num_productos_por_ticket$num_productos,
         xlab = "Tickets",
         ylab = "Número de productos",
         col = "lightblue",
-        ylim = c(0, max(num_productos_por_ticekt$num_productos) * 1.1))
+        ylim = c(0, max(num_productos_por_ticket$num_productos) * 1.1))
 
 # Añadimos una línea horizontal para indicar el promedio
 abline(h = promedio_productos_por_ticket, col = "red", lwd = 2)
 
-
+#
 ```
