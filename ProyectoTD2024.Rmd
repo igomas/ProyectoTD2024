@@ -1173,15 +1173,15 @@ num_productos_por_ticket <- data1 %>%
 # Calculamos el promedio de productos por ticket
 promedio_productos_por_ticket <- mean(num_productos_por_ticket$num_productos)
 
-# Crear un gráfico de barras del número de productos por factura
+# Creamos un gráfico de barras del número de productos por ticket
 barplot(num_productos_por_ticket$num_productos,
-        main = "Número de productos por factura",
-        xlab = "Factura",
+        main = "Número de productos por ticket",
+        xlab = "Tickets",
         ylab = "Número de productos",
         col = "lightblue",
         ylim = c(0, max(num_productos_por_ticekt$num_productos) * 1.1))
 
-# Añadir una línea horizontal para indicar el promedio
+# Añadimos una línea horizontal para indicar el promedio
 abline(h = promedio_productos_por_ticket, col = "red", lwd = 2)
 
 
