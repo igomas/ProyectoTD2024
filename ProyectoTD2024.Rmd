@@ -4,11 +4,10 @@ author: Maria Castellanos, Pablo Pons, Irene Gómez, Jenny Carolina Matamoros, A
   Herrero, Álvaro Cruz
 date: "2024-03-26"
 output:
-  bookdown::html_document2:
-    echo: true
-    number_sections: true
-    theme: spacelab
+  bookdown::pdf_document2:
     toc: true
+    toc_depth: 3
+    number_sections: true
   html_document:
     echo: true
     number_sections: true
@@ -22,10 +21,11 @@ output:
     toc: true
     toc_depth: 3
     number_sections: true
-  bookdown::pdf_document2:
-    toc: true
-    toc_depth: 3
+  bookdown::html_document2:
+    echo: true
     number_sections: true
+    theme: spacelab
+    toc: true
 always_allow_html: true
 params:
   lang: ES
@@ -1186,3 +1186,11 @@ abline(h = promedio_productos_por_ticket, col = "red", lwd = 2)
 
 #
 ```
+# **Conclusion**
+
+Para concluir, nos gustaría expresar lo que realizar este trabajo nos ha supuesto.
+
+Haber tenido que responder tanto a las preguntas individuales como al haber tenido que implementar un código para la obtención de los datos ha supuesto un reto para todos los integrantes.
+La realización del trabajo nos ha aportado la capacidad de extraer información relevante sin necesidad de ser expertos en este área en específico. Además, nos ha permitido darnos cuenta de los problemas que puede suponer un dato mal introducido o valores faltantes, entre muchos, a la hora de realizar un análisis o exploración de los datos.
+Sin embargo, lo más útil e importante que hemos obtenido de este trabajo es enfrentarnos por primera vez a un problema real de Ciencia de Datos, y más aún haciéndose en grupos, lo cual nos ha enseñado la importancia y dificultades que puede suponer trabajar en colectivo. Con casi total seguridad, en un futuro  estas competencias nos serán más que útiles tanto en lo personal como en lo profesional.
+
