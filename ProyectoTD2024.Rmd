@@ -46,6 +46,9 @@ language:
     proof: 'Demostración. '
     remark: 'Nota: '
     solution: 'Solución. '
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r setup, cache = F, echo = F, message = F, warning = F, tidy = F}
@@ -73,22 +76,53 @@ knit_hooks$set(inline = function(x) {
 
 # **Introduccion**
 
-El conjunto de datos que utilizaremos para nuestro análisis pertenece al supermercado Mercadona. Estos datos consisten en tickets de compra de los usuarios que realizan sus compras en dicho supermercado. Nuestro objetivo principal es proporcionar información relevante sobre los patrones de compra de los clientes.
+El conjunto de datos que utilizaremos para nuestro análisis pertenece al
+supermercado Mercadona. Estos datos consisten en tickets de compra de
+los usuarios que realizan sus compras en dicho supermercado. Nuestro
+objetivo principal es proporcionar información relevante sobre los
+patrones de compra de los clientes.
 
-Nos enfocaremos en varios aspectos clave de las compras en Mercadona. Exploramos las horas más concurridas del día para comprender mejor los picos de actividad. Luego, nos fijamos en la evolución del precio de los productos a lo largo del tiempo, identificando cualquier tendencia que pueda influir en el comportamiento del consumidor y las estrategias de precios de la empresa.
+Nos enfocaremos en varios aspectos clave de las compras en Mercadona.
+Exploramos las horas más concurridas del día para comprender mejor los
+picos de actividad. Luego, nos fijamos en la evolución del precio de los
+productos a lo largo del tiempo, identificando cualquier tendencia que
+pueda influir en el comportamiento del consumidor y las estrategias de
+precios de la empresa.
 
-Además, analizaremos detenidamente las ubicaciones de las tiendas de Mercadona para determinar dónde se realizan más ventas, lo que proporcionará información valiosa sobre la demanda y las preferencias del cliente. Por último, calcularemos el precio medio de compra y la cantidad media de productos en cada compra, lo que nos permitirá comprender mejor los hábitos de compra de los clientes.
-
+Además, analizaremos detenidamente las ubicaciones de las tiendas de
+Mercadona para determinar dónde se realizan más ventas, lo que
+proporcionará información valiosa sobre la demanda y las preferencias
+del cliente. Por último, calcularemos el precio medio de compra y la
+cantidad media de productos en cada compra, lo que nos permitirá
+comprender mejor los hábitos de compra de los clientes.
 
 ## Instalación automática de paquetes
 
-Se comienza cargando todas las librerías necesarias para las diversas etapas del proyecto, lo que se logra de manera eficiente utilizando el paquete pacman en R.
+Se comienza cargando todas las librerías necesarias para las diversas
+etapas del proyecto, lo que se logra de manera eficiente utilizando el
+paquete pacman en R.
 
-A continuación, se procede a cargar el conjunto de datos que se encuentra en formato .txt en la carpeta./data del repositorio del proyecto. Además, se incluye la carga de un archivo .ipynb que contiene una función útil para transformar tickets en formato pdf a txt. Esta función será esencial para automatizar la conversión del conjunto de datos, actualmente en estado bruto, a datos técnicamente correctos, donde cada variable tenga su tipo correspondiente.
+A continuación, se procede a cargar el conjunto de datos que se
+encuentra en formato .txt en la carpeta./data del repositorio del
+proyecto. Además, se incluye la carga de un archivo .ipynb que contiene
+una función útil para transformar tickets en formato pdf a txt. Esta
+función será esencial para automatizar la conversión del conjunto de
+datos, actualmente en estado bruto, a datos técnicamente correctos,
+donde cada variable tenga su tipo correspondiente.
 
-Una vez completada la fase de importación de datos, hemos obtenido un conjunto que incluye las variables relevantes para nuestro análisis. Este conjunto representa los tickets de compra del supermercado Mercadona. La información recopilada en estos tickets abarca aspectos clave como los productos adquiridos, el precio, la hora de compra y la sucursal de Mercadona correspondiente. 
+Una vez completada la fase de importación de datos, hemos obtenido un
+conjunto que incluye las variables relevantes para nuestro análisis.
+Este conjunto representa los tickets de compra del supermercado
+Mercadona. La información recopilada en estos tickets abarca aspectos
+clave como los productos adquiridos, el precio, la hora de compra y la
+sucursal de Mercadona correspondiente.
 
-Además, para llevar a cabo este proceso y realizar otras operaciones de manipulación y limpieza de datos, hemos utilizado las siguientes librerías: readr, dplyr, tidyr y stringr. Estas herramientas proporcionan funciones y métodos que nos permiten leer, transformar y manipular eficientemente los datos, garantizando así un flujo de trabajo efectivo y organizado.
+Además, para llevar a cabo este proceso y realizar otras operaciones de
+manipulación y limpieza de datos, hemos utilizado las siguientes
+librerías: readr, dplyr, tidyr y stringr. Estas herramientas
+proporcionan funciones y métodos que nos permiten leer, transformar y
+manipular eficientemente los datos, garantizando así un flujo de trabajo
+efectivo y organizado.
 
 ```{r,warning = FALSE}
 #descargaremos las librerias que necesitamos
@@ -103,15 +137,36 @@ p_load(readr, dplyr,tidyr,stringr, lubridate)
 
 ## Recogida de datos
 
-Los datos recogidos han sido tickets de Mercadona, los cuales estan en formato PDF. Necesitaremos recoger una cantidad considerable de tickets para poder realizar un analisis lo mas completo posible, los cuales se almacenaran en una carpeta "data".
+Los datos recogidos han sido tickets de Mercadona, los cuales estan en
+formato PDF. Necesitaremos recoger una cantidad considerable de tickets
+para poder realizar un analisis lo mas completo posible, los cuales se
+almacenaran en una carpeta "data".
 
-## Conversion de datos 
+## Conversion de datos
 
-El profesor nos ha proporcionado un fichero de Jupiter Lab, el cual sera usado para la conversion de formato pdf a txt
+El profesor nos ha proporcionado un fichero de Jupiter Lab, el cual sera
+usado para la conversion de formato pdf a txt
 
-## Lectura e importacion a dataframe de los datos 
+## Lectura e importacion a dataframe de los datos
 
-Vamos a guardar en una variable la ruta donde se encuentra la carpeta con todos los ficheros que utilizaremos.Usaremos el codigo list.files para obtener una lista de archivos dentro de la carpeta de la cual solo vamos a seleccionar los archivos que sean ".txt". Se creará una lista donde almacenaremos los datos de cada archivo.Para poder leer el contenido de los tickets, usaremos la funcion "read_lines" para leer linea por linea, pondremos el encoding correspondiente. En nuestro caso los datos que nos interesan del ticket son los que se encuentran hasta la linea donde nos indica el precio total de la compra realizada, por lo que pondremos que la lectura de los archivos llegue la palabra "TOTAl" ,y si no se encuentra la palabra "TOTAL" pasaremos al siguiente archivo. Como en todos los archivos las primeras lineas contienen la misma informacion,extraemos la      información y la iremos organizando en variables, pero en algunos casos necesitaremos hacer algun ajuste en los valores de cada variable, por ejemplo:la forma en la que guarda los datos en la columna Telefono, Factura y hemos indicado que la variable cantidad en cada ticket ocupa un tamaño diferente y asi lo tenga en cuenta para las otras variables que  
+Vamos a guardar en una variable la ruta donde se encuentra la carpeta
+con todos los ficheros que utilizaremos.Usaremos el codigo list.files
+para obtener una lista de archivos dentro de la carpeta de la cual solo
+vamos a seleccionar los archivos que sean ".txt". Se creará una lista
+donde almacenaremos los datos de cada archivo.Para poder leer el
+contenido de los tickets, usaremos la funcion "read_lines" para leer
+linea por linea, pondremos el encoding correspondiente. En nuestro caso
+los datos que nos interesan del ticket son los que se encuentran hasta
+la linea donde nos indica el precio total de la compra realizada, por lo
+que pondremos que la lectura de los archivos llegue la palabra "TOTAl"
+,y si no se encuentra la palabra "TOTAL" pasaremos al siguiente archivo.
+Como en todos los archivos las primeras lineas contienen la misma
+informacion,extraemos la información y la iremos organizando en
+variables, pero en algunos casos necesitaremos hacer algun ajuste en los
+valores de cada variable, por ejemplo:la forma en la que guarda los
+datos en la columna Telefono, Factura y hemos indicado que la variable
+cantidad en cada ticket ocupa un tamaño diferente y asi lo tenga en
+cuenta para las otras variables que
 
 ```{r}
 #Primero vamos a guardar en una variable la ruta donde se encuentra la carpeta con todos los ficheros que utilizaremos
@@ -195,11 +250,19 @@ head(data1)
 
 ## Ajustes variables
 
-Visualizando el data, vemos como tenemos dos variables en una , por lo que pasaremos a separarlas, la columna Ciudad c("codigo postal"," ciudad"),la columna Fecha la cual hemos separado en fecha y hora.
-Como nos podemos fijar en el data frame la variable de cantidad, no esta ajustada de una forma que nos facilite su importacion en el caso de un futuro analisis, por lo que deberemos ajustarla
-#nos fijamos en que las lineas siguen un formato, estan las cantidades del producto y el producto unidas, por lo que usaremos la funcion gsub para que añada una "/", asignaremos la nueva forma a la variable del dataframe y una vez ya hecho podemos usar la funcion separate para poder separar la columna cantidad en c("Cantidad", "Producto"). 
-Por ultimo, haremos un cambio en los valores que sean numeros, ya que en R no se usan comas sino que se usan puntos.
-Todos estos cambios los iremos guardando en el data
+Visualizando el data, vemos como tenemos dos variables en una , por lo
+que pasaremos a separarlas, la columna Ciudad c("codigo postal","
+ciudad"),la columna Fecha la cual hemos separado en fecha y hora. Como
+nos podemos fijar en el data frame la variable de cantidad, no esta
+ajustada de una forma que nos facilite su importacion en el caso de un
+futuro analisis, por lo que deberemos ajustarla #nos fijamos en que las
+lineas siguen un formato, estan las cantidades del producto y el
+producto unidas, por lo que usaremos la funcion gsub para que añada una
+"/", asignaremos la nueva forma a la variable del dataframe y una vez ya
+hecho podemos usar la funcion separate para poder separar la columna
+cantidad en c("Cantidad", "Producto"). Por ultimo, haremos un cambio en
+los valores que sean numeros, ya que en R no se usan comas sino que se
+usan puntos. Todos estos cambios los iremos guardando en el data
 
 ```{r}
 #vamos a separar la columna Ciudad en dos , donde una se llamara codigo postal y otra ciudad
@@ -231,7 +294,13 @@ producto_editado <- gsub(" ([0-9]+\\.[0-9]+)$", " /\\1", data1$Producto, perl = 
 data1$Producto <- producto_editado
 ```
 
- Si seguimos visualizando el data podemos observar como tenemos dos variables que nos dan problemas , si observamos podemos ver como los datos los cuales nos podran causar problemas para un futuro analisis, tienen en comun "kg" , para detectar todos aquellos valores y asi despues modificarlos usaremos la funcion "str_detect", al tener una vez almacenados todos aquellos valores en una variable , los uniremos juntos a sus valores correspondientes en la variable Producto.
+Si seguimos visualizando el data podemos observar como tenemos dos
+variables que nos dan problemas , si observamos podemos ver como los
+datos los cuales nos podran causar problemas para un futuro analisis,
+tienen en comun "kg" , para detectar todos aquellos valores y asi
+despues modificarlos usaremos la funcion "str_detect", al tener una vez
+almacenados todos aquellos valores en una variable , los uniremos juntos
+a sus valores correspondientes en la variable Producto.
 
 ```{r}
 #usaremos la funcion de str_detect para hallar los indices de las filas donde se encuentra "kg" lo cual lo tomaremos como referencia para encontrar la fila que equivale al precio por kilo de las frutas que se encuentran en la columna "Cantidad"
@@ -254,7 +323,11 @@ data1$Producto[indice_anterior_kg] <- producto_completo
 data1 <- separate(data1, Producto, into = c("Producto", "Precio_Final"), sep = "/(?=[^/]+$)", extra = "merge")
 ```
 
-Si nos fijamos aun hay algunas variables que nos pueden causar problema, debido a que se realizo una mala separacion en la linea y en el momento de pasarlo al data, hay datos que no son coherente o no tienen sentido, por lo que los ajustaremos
+Si nos fijamos aun hay algunas variables que nos pueden causar problema,
+debido a que se realizo una mala separacion en la linea y en el momento
+de pasarlo al data, hay datos que no son coherente o no tienen sentido,
+por lo que los ajustaremos
+
 ```{r}
 #ajuste producto pollo y conejo
 palabra1 <- "TROCEADO"
@@ -274,14 +347,20 @@ na_indices <- which(!is.na(ultimos))
 data1$Producto[medio_troceado[na_indices]] <- paste(ultimos[na_indices],data1$Producto[medio_troceado[na_indices]], sep = "")
 ```
 
- Se puede observar como hay algun valor el cual ha sido mal leido y ha sido añadido, por lo que nosotros procederemos a eliminar esos valores.
+Se puede observar como hay algun valor el cual ha sido mal leido y ha
+sido añadido, por lo que nosotros procederemos a eliminar esos valores.
+
 ```{r}
 #Visualizando el data frame, se han encontrado algunos errores, por ejemplo en las variables de Cantidad y Producto nos hemos encontrado con alguna fila con los datos de parking de entrada y salida, como en un principio se llego a la idea de no usarlo, mediante la funcion subset eliminaremos del dataframe tanto de la variable Producto como Cantidad todas aquellas filas donde aparezcan las palabras ENTRADA, SALIDA Y PARKING
 data1 <- subset(data1, !grepl("ENTRADA|SALIDA|PARKING", data1$Cantidad, ignore.case = TRUE))
 data1 <- subset(data1, !grepl("ENTRADA|SALIDA|PARKING", data1$Producto, ignore.case = TRUE))
 ```
 
-Podemos observar como en la variable Precio_Final tenemos valores NA, pero si nos fijamos ,esos valores se encuentran en la linea de abajo debido al ajuste que hicimos con los valores del data que contenian "kg". Asi que reemplazaremos los valores NA por los valores que hay en la fila siguiente
+Podemos observar como en la variable Precio_Final tenemos valores NA,
+pero si nos fijamos ,esos valores se encuentran en la linea de abajo
+debido al ajuste que hicimos con los valores del data que contenian
+"kg". Asi que reemplazaremos los valores NA por los valores que hay en
+la fila siguiente
 
 ```{r}
 # Bucle para reemplazar los NA con el valor de la siguiente fila
@@ -295,7 +374,8 @@ for (i in 1:(nrow(data1) - 1)) {
 
 ## Asignacion clase de cada variable
 
-Observando las variables nos dimos cuenta de que no estan con la clase correspondiente
+Observando las variables nos dimos cuenta de que no estan con la clase
+correspondiente
 
 ```{r}
 
@@ -317,15 +397,22 @@ data1$Total<- as.numeric(data1$Total)
 
 ```
 
+Conversión de cantidades a texto y procesamiento de productos que
+terminan en "100" y "200: Primeramente convertimos los números en
+cadenas de texto para poder tratar con ellos. Ya que productos como las
+servilletas o el pan tienen un indice de 3 cifras el qual nosotros
+separamos con la funcion substr.Esto lo hacemos ya que estas cifras se
+nos acumulaban en la variable cantidad. El procedimiento es el
+siguiente: 1.convertimos los números en cadenas de texto 2.Filtramos los
+índices donde los números terminan en"100" 3.Asignaremos a las filas de
+cada producto segun el indice en que localizamos donde estaban los
+nuevos productos completos
 
-Conversión de cantidades a texto y procesamiento de productos que terminan en "100" y "200:
-Primeramente convertimos los números en cadenas de texto para poder tratar con ellos. Ya que productos
-como las servilletas o el pan tienen un indice de 3 cifras el qual  nosotros separamos con la funcion substr.Esto lo hacemos ya que estas cifras se nos acumulaban en la variable cantidad. El procedimiento es el siguiente:
-  1.convertimos los números en cadenas de texto
-  2.Filtramos los índices donde los números terminan en "100"
-  3.Asignaremos a las filas de cada producto segun el indice en que localizamos donde estaban los nuevos productos completos
-  
-Por otro lado seguiremos el mismo procedimiento para los productoes los cuales tienen una cantidad por defecto, (en este caso el 12 de los huevos). Ademas de aplicar tambien este mismo proceso con otros productos los cuales tienen el mismo patron.
+Por otro lado seguiremos el mismo procedimiento para los productoes los
+cuales tienen una cantidad por defecto, (en este caso el 12 de los
+huevos). Ademas de aplicar tambien este mismo proceso con otros
+productos los cuales tienen el mismo patron.
+
 ```{r}
 #convertimos los números en cadenas de texto
 cantidades_texto <- as.character(data1$Cantidad)
@@ -458,25 +545,36 @@ producto7_completo <- paste(ultimos_dos_numeros2, toallitas2, sep = " ")
 data1$Producto[indices2_toallitas] <- producto7_completo
 
 ```
-Una vez ya hemos terminado de ajustar y modificar el data para facilitar nuestro futuro analisis , podemos ver un resumen de nuestro data
+
+Una vez ya hemos terminado de ajustar y modificar el data para facilitar
+nuestro futuro analisis , podemos ver un resumen de nuestro data
 
 ```{r}
 #Funcion para mostrar un resumen de nuestro datframe
 glimpse(data1)
 ```
 
-
 # **Caracteristicas generales**
 
-Podemos observar que usando la función glimpse de la librería dplyr proporciona una visión rápida y resumida de los datos en un dataframe, en este caso de nuestro data1, el cual contiene los datos que queremos analizar.
+Podemos observar que usando la función glimpse de la librería dplyr
+proporciona una visión rápida y resumida de los datos en un dataframe,
+en este caso de nuestro data1, el cual contiene los datos que queremos
+analizar.
 
-Principalmente nuestro dataset tiene un total de 1213 observaciones y 12 variables. Tras un proceso de limpieza y preprocesamiento de los datos, el dataset data1 contiene datos los cuales nos interesan para hacer nuestro análisis posterior. Tras esta depuración de los datos, las variables que nos convienen están mostradas en la Tabla 1.
+Principalmente nuestro dataset tiene un total de 1213 observaciones y 12
+variables. Tras un proceso de limpieza y preprocesamiento de los datos,
+el dataset data1 contiene datos los cuales nos interesan para hacer
+nuestro análisis posterior. Tras esta depuración de los datos, las
+variables que nos convienen están mostradas en la Tabla 1.
 
 ## Variables tipo numericas
 
-A continuación, mostraremos aquellas variables las cuales son de tipo numérico, las cuales usaremos a posteriori para responder las preguntas planteadas.
-Como podemos observar , tenemos de variables tipo numérico el Código Postal, Teléfono, Cantidad, Precio Final y Total. Explorando en cada una de las variables podemos observar como en la variable “Cantidad” no obtendremos números demasiado grandes
-
+A continuación, mostraremos aquellas variables las cuales son de tipo
+numérico, las cuales usaremos a posteriori para responder las preguntas
+planteadas. Como podemos observar , tenemos de variables tipo numérico
+el Código Postal, Teléfono, Cantidad, Precio Final y Total. Explorando
+en cada una de las variables podemos observar como en la variable
+"Cantidad" no obtendremos números demasiado grandes
 
 ```{r}
 
@@ -488,18 +586,19 @@ head(df_numericas_unicas)
 
 ## Variables tipo categoricas
 
-Continuamos con las variables de tipo categórico, en nuestro caso son “Empresa”, “Direccion”, “Ciudad”, “Hora”, “Factura”, “Producto”.
+Continuamos con las variables de tipo categórico, en nuestro caso son
+"Empresa", "Direccion", "Ciudad", "Hora", "Factura", "Producto".
 
 ```{r}
 #Funcion para seleccionar las variables tipo categoricas
 data_categoricas<- data1 %>% select_if(is.character)
 head(data_categoricas)
 ```
+
 ## Variables tipo fecha
 
-En este caso como podemos observar nuestra única variable tipo fecha es la fecha de compra de nuestros tickets.
-
-
+En este caso como podemos observar nuestra única variable tipo fecha es
+la fecha de compra de nuestros tickets.
 
 ```{r}
 data_fechas<- data1 %>% select_if(is.Date)
@@ -507,30 +606,42 @@ head(data_fechas)
 
 #Funcion para seleccionar las variables tipo fecha
 ```
+
 # **Análisis de missing data**
 
-El análisis de datos faltantes se lleva a cabo principalmente utilizando la función complete.cases. Esta función se utiliza para eliminar las filas que contienen uno o más valores faltantes en el dataframe. Además se descartan las lineas vacias leídas en los tickets.
+El análisis de datos faltantes se lleva a cabo principalmente utilizando
+la función complete.cases. Esta función se utiliza para eliminar las
+filas que contienen uno o más valores faltantes en el dataframe. Además
+se descartan las lineas vacias leídas en los tickets.
 
-Aquí está el proceso específico:
-1. Identificación de datos faltantes: Se realiza una exploración inicial de los datos para detectar valores ausentes en el dataframe.
+Aquí está el proceso específico: 1. Identificación de datos faltantes:
+Se realiza una exploración inicial de los datos para detectar valores
+ausentes en el dataframe.
 
-2. Eliminación de filas con datos faltantes: Se utiliza la función complete.cases para eliminar las filas que contienen valores faltantes en cualquier columna del dataframe. Esto garantiza que el dataframe final no tenga valores faltantes y esté listo para su análisis.
+2.  Eliminación de filas con datos faltantes: Se utiliza la función
+    complete.cases para eliminar las filas que contienen valores
+    faltantes en cualquier columna del dataframe. Esto garantiza que el
+    dataframe final no tenga valores faltantes y esté listo para su
+    análisis.
 
-3. Resultado final: Después de este proceso, el dataframe resultante no tendrá valores faltantes y estará listo para análisis posteriores sin la preocupación de la integridad de los datos.
+3.  Resultado final: Después de este proceso, el dataframe resultante no
+    tendrá valores faltantes y estará listo para análisis posteriores
+    sin la preocupación de la integridad de los datos.
 
-En resumen, el análisis de datos faltantes en el código se centra en garantizar que el dataframe esté completo y no contenga valores faltantes antes de proceder con cualquier análisis adicional. Además de garantizar la correcta separación de los datos en sus variables correspondientes  
-
-
+En resumen, el análisis de datos faltantes en el código se centra en
+garantizar que el dataframe esté completo y no contenga valores
+faltantes antes de proceder con cualquier análisis adicional. Además de
+garantizar la correcta separación de los datos en sus variables
+correspondientes
 
 # **Preguntas**
-
 
 1.  A qué hora se suele ir más a comprar?
 2.  Cuál ha sido el producto más comprado?
 3.  En que Mercadona se realizan más ventas?
 4.  Cual es el precio medio de los tickets?
 5.  En que mes se ha comprado más "x producto"?
-6.  ¿Cómo ha variado el precio promedio de los productos más vendidos en los últimos meses?
+6.  ¿Cuántos productos se compran en promedio por ticket de compra?
 
 ```{r warning=FALSE}
 #Haremos la importacion de los datos
@@ -712,14 +823,22 @@ data1$Total<- as.numeric(data1$Total)
 
 ```
 
-Conversión de cantidades a texto y procesamiento de productos que terminan en "100" y "200:
-Primeramente convertimos los números en cadenas de texto para poder tratar con ellos. Ya que productos
-como las servilletas o el pan tienen un indice de 3 cifras el qual  nosotros separamos con la funcion substr.Esto lo hacemos ya que estas cifras se nos acumulaban en la variable cantidad. El procedimiento es el siguiente:
-  1.convertimos los números en cadenas de texto
-  2.Filtramos los índices donde los números terminan en "100"
-  3.Asignaremos a las filas de cada producto segun el indice en que localizamos donde estaban los nuevos productos completos
-  
-Por otro lado seguiremos el mismo procedimiento para los productoes los cuales tienen una cantidad por defecto, (en este caso el 12 de los huevos). Ademas de aplicar tambien este mismo proceso con otros productos los cuales tienen el mismo patron.
+Conversión de cantidades a texto y procesamiento de productos que
+terminan en "100" y "200: Primeramente convertimos los números en
+cadenas de texto para poder tratar con ellos. Ya que productos como las
+servilletas o el pan tienen un indice de 3 cifras el qual nosotros
+separamos con la funcion substr.Esto lo hacemos ya que estas cifras se
+nos acumulaban en la variable cantidad. El procedimiento es el
+siguiente: 1.convertimos los números en cadenas de texto 2.Filtramos los
+índices donde los números terminan en"100" 3.Asignaremos a las filas de
+cada producto segun el indice en que localizamos donde estaban los
+nuevos productos completos
+
+Por otro lado seguiremos el mismo procedimiento para los productoes los
+cuales tienen una cantidad por defecto, (en este caso el 12 de los
+huevos). Ademas de aplicar tambien este mismo proceso con otros
+productos los cuales tienen el mismo patron.
+
 ```{r}
 #convertimos los números en cadenas de texto
 cantidades_texto <- as.character(data1$Cantidad)
@@ -860,9 +979,7 @@ data1$Producto[indices2_toallitas] <- producto7_completo
 
 ```
 
-
-**1.  A qué hora se suele ir más a comprar?**
-
+**1. A qué hora se suele ir más a comprar?**
 
 ```{r}
 # Separar las horas y los minutos
@@ -878,7 +995,9 @@ print(paste("La hora media del día a la que se suele ir mas a menudo a comprar 
             media_horas, ":", media_minutos))
 ```
 
-En la Figura 4, podemos observar la relación que hay entre las horas del día y su frecuencia de compra.
+En la Figura 4, podemos observar la relación que hay entre las horas del
+día y su frecuencia de compra.
+
 ```{r}
 library(ggplot2)
 # Crear un histograma de las horas de compra
@@ -892,12 +1011,14 @@ ggplot(data1, aes(x = as.numeric(sub("^(\\d+):(\\d+)$", "\\1", hora)))) +
   geom_vline(xintercept = mean(as.numeric(sub("^(\\d+):(\\d+)$", "\\1", data1$hora))), 
              color = "red", linetype = "dashed", size = 1)
 ```
+
 Figura 4.
 
+**2. Cuál ha sido el producto más comprado?**
 
-**2.  Cuál ha sido el producto más comprado?**
-
-Se contarán las cantidades compradas de cada grupo , para luego registrar cuales han sido los 10 productos más comprados y la media de la cantidad comprada por estos, Figura 5.
+Se contarán las cantidades compradas de cada grupo , para luego
+registrar cuales han sido los 10 productos más comprados y la media de
+la cantidad comprada por estos, Figura 5.
 
 ```{r}
 
@@ -914,11 +1035,14 @@ ggplot(conteo_productos[1:10,], aes(x = reorder(Producto, -Cantidad_Total), y = 
   labs(x = "Producto", y = "Cantidad Total", title = "Top 10 Productos Más Comprados") +
   theme_minimal()
 ```
+
 Figura 5
 
- **3.  En que Mercadona se realizan más ventas?**
- 
-En la Figura 6, estamos registrando el número de compras que se hace en cada uno de los Mercadona que tenemos registrado, para ver en cual se ha hecho un mayor número de compras
+**3. En que Mercadona se realizan más ventas?**
+
+En la Figura 6, estamos registrando el número de compras que se hace en
+cada uno de los Mercadona que tenemos registrado, para ver en cual se ha
+hecho un mayor número de compras
 
 ```{r}
 #ponemos librerias
@@ -945,11 +1069,15 @@ ggplot(data = compras_merc, aes(x = reorder(Direccion, n), y = n)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) #rotamos las etiquetas
 
 ```
+
 Figura 6.
 
-**4.  Cual es el precio medio de los tickets?**
+**4. Cual es el precio medio de los tickets?**
 
-En la figura 7, estamos obteniendo la cantidad de tickets que hay en cada intervalo de precio, para apreciar en cual de ellos se recibe la mayor cantidad de tickets.
+En la figura 7, estamos obteniendo la cantidad de tickets que hay en
+cada intervalo de precio, para apreciar en cual de ellos se recibe la
+mayor cantidad de tickets.
+
 ```{r}
 library(ggplot2)
 maximo_valor <-  max(data1$Total)
@@ -979,11 +1107,14 @@ print(paste("El ticket con mayor precio es de",maximo_valor))
 print(paste("El ticket con menor precio es de",minimo_valor))
 print(paste("El precio medio de los tickets es",media_valor))
 ```
+
 Figura 7
 
-**5.  En que mes se ha comprado más el producto "CACAHUETE SIN SAL" ?**
+**5. En que mes se ha comprado más el producto "CACAHUETE SIN SAL" ?**
 
-Haremos la estadística de cada producto cual ha sido el mes en el que mas se ha comprado dicho producto.
+Haremos la estadística de cada producto cual ha sido el mes en el que
+mas se ha comprado dicho producto.
+
 ```{r, echo = FALSE}
 library(tidyverse)
 library(lubridate)
@@ -1005,7 +1136,10 @@ data_clear_producto %>% filter(!is.na(Cantidad)) %>%
   filter(maximo_cant == suma_cantidad)
   
 ```
-Hemos seleccionado el CACAHUETE SIN SAL parea poder ver en que mes se ha comprado más producto y en que mes menos
+
+Hemos seleccionado el CACAHUETE SIN SAL parea poder ver en que mes se ha
+comprado más producto y en que mes menos
+
 ```{r}
 #seleccionamos la columna producto
 #unique(data1$Producto)
@@ -1024,42 +1158,31 @@ data_clear_producto %>% filter(!is.na(Cantidad)) %>%
 
 ```
 
-
 Figura 8
 
-6.  ¿Cómo ha variado el precio de los productos más vendidos en los últimos meses?
+6.  ¿Cuántos productos se compran en promedio por ticket de compra?
 
 ```{r}
-
 library(dplyr)
-library(ggplot2)
 
-# Nos quedamos con las columnas Cantidad,Producto y Precio_Final 
-ventas <- data1%>% select(c("Cantidad","Producto","Precio_Final","fecha")) 
+# Calculamos el número de productos por ticket
+num_productos_por_ticket <- data1 %>%
+  group_by(Factura) %>%
+  summarise(num_productos = n_distinct(Producto))
 
-# Calculamos el precio promedio por producto y mes
-precio_promedio_por_producto_mes <- ventas %>%
-  mutate(mes = format(fecha, "%Y-%m")) %>%
-  group_by(Producto, mes) %>%
-  summarise(precio_promedio = mean(Precio_Final, na.rm = TRUE), .groups = "drop")
+# Calculamos el promedio de productos por ticket
+promedio_productos_por_ticket <- mean(num_productos_por_ticket$num_productos)
 
-# Encontramos los productos más vendidos
-productos_mas_vendidos <- precio_promedio_por_producto_mes %>%
-  group_by(Producto) %>%
-  summarise(ventas_totales = sum(precio_promedio)) %>%
-  top_n(5, ventas_totales)
+# Crear un gráfico de barras del número de productos por factura
+barplot(num_productos_por_ticket$num_productos,
+        main = "Número de productos por factura",
+        xlab = "Factura",
+        ylab = "Número de productos",
+        col = "lightblue",
+        ylim = c(0, max(num_productos_por_ticekt$num_productos) * 1.1))
 
-# Filtramos las ventas para los productos más vendidos
-ventas_productos_mas_vendidos <- ventas %>%
-  filter(Producto %in% productos_mas_vendidos$Producto)
+# Añadir una línea horizontal para indicar el promedio
+abline(h = promedio_productos_por_ticket, col = "red", lwd = 2)
 
-# Visualizamos la evolución del precio promedio de los productos más vendidos en los últimos meses
-ggplot(ventas_productos_mas_vendidos, aes(x = fecha, y = Precio_Final, color = Producto)) +
-  geom_line() +
-  labs(title = "Evolución del Precio Promedio de los Productos Más Vendidos",
-       x = "Fecha",
-       y = "Precio Promedio") +
-  theme_minimal()+
-  ylim(1, NA)
 
 ```
