@@ -149,24 +149,11 @@ usado para la conversion de formato pdf a txt
 
 ## Lectura e importacion a dataframe de los datos
 
-Vamos a guardar en una variable la ruta donde se encuentra la carpeta
-con todos los ficheros que utilizaremos.Usaremos el codigo list.files
-para obtener una lista de archivos dentro de la carpeta de la cual solo
-vamos a seleccionar los archivos que sean ".txt". Se creará una lista
-donde almacenaremos los datos de cada archivo.Para poder leer el
-contenido de los tickets, usaremos la funcion "read_lines" para leer
-linea por linea, pondremos el encoding correspondiente. En nuestro caso
-los datos que nos interesan del ticket son los que se encuentran hasta
-la linea donde nos indica el precio total de la compra realizada, por lo
-que pondremos que la lectura de los archivos llegue la palabra "TOTAl"
-,y si no se encuentra la palabra "TOTAL" pasaremos al siguiente archivo.
-Como en todos los archivos las primeras lineas contienen la misma
-informacion,extraemos la información y la iremos organizando en
-variables, pero en algunos casos necesitaremos hacer algun ajuste en los
-valores de cada variable, por ejemplo:la forma en la que guarda los
-datos en la columna Telefono, Factura y hemos indicado que la variable
-cantidad en cada ticket ocupa un tamaño diferente y asi lo tenga en
-cuenta para las otras variables que
+Para empezar, guardaremos la ruta donde se encuentra la carpeta con todos los archivos que utilizaremos en una variable. Utilizaremos el código list.files para obtener una lista de archivos dentro de esa carpeta, seleccionando solo los archivos que tengan extensión ".txt". Crearemos una lista para almacenar los datos de cada archivo.
+
+Para leer el contenido de los tickets, emplearemos la función read_lines, leyendo línea por línea y especificando el encoding correspondiente. Nos interesan los datos del ticket hasta la línea que indica el precio total de la compra. Por lo tanto, configuraremos la lectura de los archivos hasta la palabra "TOTAL". Si no se encuentra la palabra "TOTAL", pasaremos al siguiente archivo.
+
+Dado que las primeras líneas de todos los archivos contienen la misma información, la extraeremos y la organizaremos en variables. Sin embargo, en algunos casos, necesitaremos ajustar los valores de cada variable. Por ejemplo, en la columna de Teléfono y Factura, y también hemos indicado que la variable "cantidad" en cada ticket ocupa un tamaño diferente, lo que debe tenerse en cuenta para las otras variables.
 
 ```{r}
 #Primero vamos a guardar en una variable la ruta donde se encuentra la carpeta con todos los ficheros que utilizaremos
@@ -249,20 +236,11 @@ head(data1)
 ```
 
 ## Ajustes variables
+Al visualizar los datos, se observa que hay dos variables combinadas en una. Por lo tanto, procederemos a separarlas. La columna "Ciudad" se separará en "Código Postal" y "Ciudad", mientras que la columna "Fecha" se dividirá en "Fecha" y "Hora".
 
-Visualizando el data, vemos como tenemos dos variables en una , por lo
-que pasaremos a separarlas, la columna Ciudad c("codigo postal","
-ciudad"),la columna Fecha la cual hemos separado en fecha y hora. Como
-nos podemos fijar en el data frame la variable de cantidad, no esta
-ajustada de una forma que nos facilite su importacion en el caso de un
-futuro analisis, por lo que deberemos ajustarla #nos fijamos en que las
-lineas siguen un formato, estan las cantidades del producto y el
-producto unidas, por lo que usaremos la funcion gsub para que añada una
-"/", asignaremos la nueva forma a la variable del dataframe y una vez ya
-hecho podemos usar la funcion separate para poder separar la columna
-cantidad en c("Cantidad", "Producto"). Por ultimo, haremos un cambio en
-los valores que sean numeros, ya que en R no se usan comas sino que se
-usan puntos. Todos estos cambios los iremos guardando en el data
+Además, se nota que la variable de cantidad no está formateada de manera que facilite su importación para un análisis futuro. Por lo tanto, se ajustará. Se observa que las líneas siguen un formato donde las cantidades del producto y el producto están unidos. Utilizaremos la función gsub para añadir un "/", asignaremos la nueva forma a la variable del dataframe y luego usaremos la función separate para dividir la columna cantidad en "Cantidad" y "Producto".
+
+Finalmente, realizaremos un cambio en los valores numéricos, ya que en R se utilizan puntos en lugar de comas. Todos estos cambios se irán guardando en el dataframe.
 
 ```{r}
 #vamos a separar la columna Ciudad en dos , donde una se llamara codigo postal y otra ciudad
@@ -294,13 +272,7 @@ producto_editado <- gsub(" ([0-9]+\\.[0-9]+)$", " /\\1", data1$Producto, perl = 
 data1$Producto <- producto_editado
 ```
 
-Si seguimos visualizando el data podemos observar como tenemos dos
-variables que nos dan problemas , si observamos podemos ver como los
-datos los cuales nos podran causar problemas para un futuro analisis,
-tienen en comun "kg" , para detectar todos aquellos valores y asi
-despues modificarlos usaremos la funcion "str_detect", al tener una vez
-almacenados todos aquellos valores en una variable , los uniremos juntos
-a sus valores correspondientes en la variable Producto.
+Al continuar visualizando los datos, se identifican dos variables que podrían causar problemas en un análisis futuro. Estos datos problemáticos tienen en común la unidad de medida "kg". Para detectar todos los valores que contienen esta unidad y posteriormente modificarlos, se utilizará la función "str_detect". Una vez que se hayan almacenado todos estos valores en una variable, se unirán a sus respectivos valores en la variable Producto.
 
 ```{r}
 #usaremos la funcion de str_detect para hallar los indices de las filas donde se encuentra "kg" lo cual lo tomaremos como referencia para encontrar la fila que equivale al precio por kilo de las frutas que se encuentran en la columna "Cantidad"
@@ -375,7 +347,8 @@ for (i in 1:(nrow(data1) - 1)) {
 ## Asignacion clase de cada variable
 
 Observando las variables nos dimos cuenta de que no estan con la clase
-correspondiente
+correspondiente, y que en el momento de asignar las clases hay algunas que nos causan
+ciertos problemas por lo que procederemos a ajustarlas
 
 ```{r}
 
@@ -543,26 +516,13 @@ glimpse(data1)
 ```
 
 # **Caracteristicas generales**
+La función glimpse de la librería dplyr proporciona una visión rápida y resumida de los datos en un dataframe. En nuestro caso, el dataframe data1 contiene los datos que queremos analizar.
 
-Podemos observar que usando la función glimpse de la librería dplyr
-proporciona una visión rápida y resumida de los datos en un dataframe,
-en este caso de nuestro data1, el cual contiene los datos que queremos
-analizar.
-
-Principalmente nuestro dataset tiene un total de 1213 observaciones y 12
-variables. Tras un proceso de limpieza y preprocesamiento de los datos,
-el dataset data1 contiene datos los cuales nos interesan para hacer
-nuestro análisis posterior. Tras esta depuración de los datos, las
-variables que nos convienen están mostradas en la Tabla 1.
+Después de un proceso de limpieza y preprocesamiento de los datos, el dataset data1 contiene los datos relevantes para nuestro análisis posterior. Este dataset tiene un total de 1213 observaciones y 12 variables. Las variables que nos interesan, después de depurar los datos, están resumidas en la Tabla 1.
 
 ## Variables tipo numericas
 
-A continuación, mostraremos aquellas variables las cuales son de tipo
-numérico, las cuales usaremos a posteriori para responder las preguntas
-planteadas. Como podemos observar , tenemos de variables tipo numérico
-el Código Postal, Teléfono, Cantidad, Precio Final y Total. Explorando
-en cada una de las variables podemos observar como en la variable
-"Cantidad" no obtendremos números demasiado grandes
+Se presentan las variables numéricas relevantes para responder las preguntas planteadas: Código Postal, Teléfono, Cantidad, Precio Final y Total. Tras explorar cada una, se observa que en la variable "Cantidad" no se obtienen números excesivamente grandes.
 
 ```{r}
 
@@ -574,8 +534,7 @@ head(df_numericas_unicas)
 
 ## Variables tipo categoricas
 
-Continuamos con las variables de tipo categórico, en nuestro caso son
-"Empresa", "Direccion", "Ciudad", "Hora", "Factura", "Producto".
+Las variables de tipo categórico, en nuestro caso son "Empresa", "Direccion", "Ciudad", "Hora", "Factura", "Producto".
 
 ```{r}
 #Funcion para seleccionar las variables tipo categoricas
