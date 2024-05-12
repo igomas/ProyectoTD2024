@@ -823,21 +823,10 @@ data1$Total<- as.numeric(data1$Total)
 
 ```
 
-Conversión de cantidades a texto y procesamiento de productos que
-terminan en "100" y "200: Primeramente convertimos los números en
-cadenas de texto para poder tratar con ellos. Ya que productos como las
-servilletas o el pan tienen un indice de 3 cifras el qual nosotros
-separamos con la funcion substr.Esto lo hacemos ya que estas cifras se
-nos acumulaban en la variable cantidad. El procedimiento es el
-siguiente: 1.convertimos los números en cadenas de texto 2.Filtramos los
-índices donde los números terminan en"100" 3.Asignaremos a las filas de
-cada producto segun el indice en que localizamos donde estaban los
-nuevos productos completos
 
-Por otro lado seguiremos el mismo procedimiento para los productoes los
-cuales tienen una cantidad por defecto, (en este caso el 12 de los
-huevos). Ademas de aplicar tambien este mismo proceso con otros
-productos los cuales tienen el mismo patron.
+El proceso implica la conversión de cantidades numéricas a texto y el manejo de productos que terminan en "100" y "200", así como aquellos con cantidades por defecto, como los huevos. Se convierten las cantidades en cadenas de texto para facilitar la manipulación. Se filtran los índices donde los números terminan en "100" y se asignan a los productos correspondientes.
+
+Se sigue un procedimiento similar para productos con cantidades predeterminadas. En resumen, se procesan cantidades y productos siguiendo patrones específicos para una gestión eficiente.
 
 ```{r}
 #convertimos los números en cadenas de texto
