@@ -4,11 +4,10 @@ author: Maria Castellanos, Pablo Pons, Irene Gómez, Jenny Carolina Matamoros, A
   Herrero, Álvaro Cruz
 date: "2024-03-26"
 output:
-  html_document:
-    echo: true
-    number_sections: true
-    theme: lumen
+  pdf_document:
     toc: true
+    toc_depth: 3
+    number_sections: true
   bookdown::pdf_document2:
     toc: true
     toc_depth: 3
@@ -17,10 +16,11 @@ output:
     echo: true
     number_sections: true
     toc: true
-  pdf_document:
-    toc: true
-    toc_depth: 3
+  html_document:
+    echo: true
     number_sections: true
+    theme: lumen
+    toc: true
   bookdown::html_document2:
     echo: true
     number_sections: true
